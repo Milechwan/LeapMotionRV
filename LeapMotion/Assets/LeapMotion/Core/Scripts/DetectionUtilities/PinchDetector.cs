@@ -66,7 +66,7 @@ namespace Leap.Unity {
       _didChange = false;
 
       Hand hand = _handModel.GetLeapHand();
-
+      
       if (hand == null || !_handModel.IsTracked) {
         texto.enabled = false;
         changeState(false);

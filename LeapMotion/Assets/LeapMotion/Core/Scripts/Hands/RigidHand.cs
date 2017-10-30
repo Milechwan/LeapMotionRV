@@ -29,13 +29,45 @@ namespace Leap.Unity {
       base.InitHand();
     }
 
-    public override void UpdateHand() {
+        public float produto_escalar(FingerModel vetor1, FingerModel vetor2)
+        {
+            float resultado = 0.0f;
+            resultado = (vetor1.GetBoneDirection(3).x * vetor2.GetBoneDirection(3).x) + (vetor1.GetBoneDirection(3).y * vetor2.GetBoneDirection(3).y) + (vetor1.GetBoneDirection(3).z * vetor2.GetBoneDirection(3).z);
+            return resultado;
+        }
 
+        public float modulo_vetor(FingerModel vet)
+        {
+            return Mathf.Sqrt(Mathf.Pow(vet.GetBoneDirection(3).x, 2) + Mathf.Pow(vet.GetBoneDirection(3).y, 2) + Mathf.Pow(vet.GetBoneDirection(3).z, 2));
+        }
+
+        private double RadianToDegree(double angle)
+        {
+            return angle * (180.0 / Mathf.PI);
+        }
+
+        public override void UpdateHand() {
+            //Finger f1, f2;
+            FingerModel f1 = null, f2= null;
+      float angulo= 0.0f;
       for (int f = 0; f < fingers.Length; ++f) {
         if (fingers[f] != null) {
           fingers[f].UpdateFinger();
+          Debug.Log("Dedo "+fingers[f].fingerType+ "Direcao"+ fingers[f].GetBoneDirection(3).ToString()+ "basis osso"+ fingers[f].GetBoneCenter(3));
+
+                    if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_MIDDLE)
+                        f1 = fingers[f];
+                    if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_THUMB)
+                        f2 = fingers[f];
+                     //   Debug.Log("Angulo: " + produto_escalar();
         }
       }
+            if ((f1 != null) && (f2 != null))
+            {
+                angulo = Mathf.Acos((produto_escalar(f1, f2)) / (modulo_vetor(f1) * modulo_vetor(f2)));
+                
+            }
+            Debug.Log("Angulo:"+RadianToDegree(angulo));
 
       if (palm != null) {
         Rigidbody palmBody = palm.GetComponent<Rigidbody>();
