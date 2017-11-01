@@ -10,6 +10,7 @@
 using UnityEngine;
 using System.Collections;
 using Leap;
+using UnityEngine.UI;
 
 namespace Leap.Unity {
   /** A physics model for our rigid hand made out of various Unity Collider. */
@@ -20,7 +21,9 @@ namespace Leap.Unity {
       }
     }
     public float filtering = 0.5f;
-
+    public Text feedback;
+    public static int contador = 0;
+    public static bool b = true;
     public override bool SupportsEditorPersistence() {
       return true;
     }
@@ -49,25 +52,46 @@ namespace Leap.Unity {
         public override void UpdateHand() {
             //Finger f1, f2;
             FingerModel f1 = null, f2= null;
-      float angulo= 0.0f;
+      //float angulo= 0.0f;
       for (int f = 0; f < fingers.Length; ++f) {
         if (fingers[f] != null) {
           fingers[f].UpdateFinger();
-          Debug.Log("Dedo "+fingers[f].fingerType+ "Direcao"+ fingers[f].GetBoneDirection(3).ToString()+ "basis osso"+ fingers[f].GetBoneCenter(3));
+          //Debug.Log("Dedo "+fingers[f].fingerType+ "Direcao"+ fingers[f].GetBoneDirection(3).ToString()+ "basis osso"+ fingers[f].GetBoneCenter(3));
 
                     if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_MIDDLE)
                         f1 = fingers[f];
-                    if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_THUMB)
+                    if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_INDEX)
                         f2 = fingers[f];
                      //   Debug.Log("Angulo: " + produto_escalar();
         }
       }
-            if ((f1 != null) && (f2 != null))
-            {
-                angulo = Mathf.Acos((produto_escalar(f1, f2)) / (modulo_vetor(f1) * modulo_vetor(f2)));
-                
+            // if ((f1 != null) && (f2 != null))
+            //{
+            //  angulo = Mathf.Acos((produto_escalar(f1, f2)) / (modulo_vetor(f1) * modulo_vetor(f2)));
+
+            //}
+            //Debug.Log("Angulo:"+RadianToDegree(angulo));
+            if (f2 != null &&  f1 !=null)
+            { //contar abdução dos dedos médio e indicador até 10
+                //texto está dando null pointer exception!!!
+                if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x)>0.02 && contador<=10 && b)
+                {
+                    contador++;
+                    //feedback.enabled=false;
+                    b = false;
+                    Debug.Log("Contador de movimentos: "+contador);
+                }
+                if(Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x)< 0.02)
+                {
+                    b = true;
+                }
+                /*if (contador==10)
+                {
+                    feedback.enabled=true;
+                  
+                }*/
+                //Debug.Log("Posicao ponta do indicador: "+f2.GetLeapFinger().TipPosition+" pos dedo medio: "+f1.GetLeapFinger().TipPosition);
             }
-            Debug.Log("Angulo:"+RadianToDegree(angulo));
 
       if (palm != null) {
         Rigidbody palmBody = palm.GetComponent<Rigidbody>();
