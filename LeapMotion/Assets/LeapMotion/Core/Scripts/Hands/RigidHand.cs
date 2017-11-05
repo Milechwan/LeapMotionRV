@@ -22,8 +22,10 @@ namespace Leap.Unity {
     }
     public float filtering = 0.5f;
     public Text feedback;
-    public static int contador = 0;
-    public static bool b = true;
+    public static int contadorAbducao = 0;
+    public static int contadorLevant = 0;//esse é rpa levantar dedo
+    public static bool aux_texto_abd = true;
+    public static bool aux_texto_levant = true;//esse é pra levantar dedo
     public override bool SupportsEditorPersistence() {
       return true;
     }
@@ -32,16 +34,16 @@ namespace Leap.Unity {
       base.InitHand();
     }
 
-        public float produto_escalar(FingerModel vetor1, FingerModel vetor2)
+        public float produto_escalar(Vector3 vetor1, Vector3 vetor2)
         {
             float resultado = 0.0f;
-            resultado = (vetor1.GetBoneDirection(3).x * vetor2.GetBoneDirection(3).x) + (vetor1.GetBoneDirection(3).y * vetor2.GetBoneDirection(3).y) + (vetor1.GetBoneDirection(3).z * vetor2.GetBoneDirection(3).z);
+            resultado = (vetor1.x * vetor2.x) + (vetor1.y * vetor2.y) + (vetor1.z * vetor2.z);
             return resultado;
         }
 
-        public float modulo_vetor(FingerModel vet)
+        public float modulo_vetor(Vector3 vet)
         {
-            return Mathf.Sqrt(Mathf.Pow(vet.GetBoneDirection(3).x, 2) + Mathf.Pow(vet.GetBoneDirection(3).y, 2) + Mathf.Pow(vet.GetBoneDirection(3).z, 2));
+            return Mathf.Sqrt(Mathf.Pow(vet.x, 2) + Mathf.Pow(vet.y, 2) + Mathf.Pow(vet.z, 2));
         }
 
         private double RadianToDegree(double angle)
@@ -67,30 +69,40 @@ namespace Leap.Unity {
       }
             // if ((f1 != null) && (f2 != null))
             //{
-            //  angulo = Mathf.Acos((produto_escalar(f1, f2)) / (modulo_vetor(f1) * modulo_vetor(f2)));
+            //  angulo = Mathf.Acos((produto_escalar(f1.GetBoneDirection(3), f2.GetBoneDirection(3))) / (modulo_vetor(f1.GetBoneDirection(3)) * modulo_vetor(f2.GetBoneDirection(3))));
 
             //}
             //Debug.Log("Angulo:"+RadianToDegree(angulo));
             if (f2 != null &&  f1 !=null)
             { //contar abdução dos dedos médio e indicador até 10
                 //texto está dando null pointer exception!!!
-                if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x)>0.02 && contador<=10 && b)
+                if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x)>0.02 && contadorAbducao<10 && aux_texto_abd)
                 {
-                    contador++;
-                    //feedback.enabled=false;
-                    b = false;
-                    Debug.Log("Contador de movimentos: "+contador);
-                }
+                    contadorAbducao++;
+                    feedback.enabled=false;
+                    aux_texto_abd = false;
+                    Debug.Log("Contador de movimentos: "+contadorAbducao);
+                }//else if(Mathf.Abs(f2.GetLeapFinger().TipPosition.y - f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).Basis.yBasis.y))
+                //{
+
+                //}
                 if(Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x)< 0.02)
                 {
-                    b = true;
+                    aux_texto_abd = true;
                 }
-                /*if (contador==10)
+                if (contadorAbducao==10)
                 {
                     feedback.enabled=true;
-                  
+                    contadorAbducao = 0;
+
+                }
+                /*if (contadorAbducao>10)
+                {
+                    Debug.Log("Posicao ponta do indicador: " + f2.GetLeapFinger().TipPosition);
+                   
                 }*/
-                //Debug.Log("Posicao ponta do indicador: "+f2.GetLeapFinger().TipPosition+" pos dedo medio: "+f1.GetLeapFinger().TipPosition);
+                
+                
             }
 
       if (palm != null) {
