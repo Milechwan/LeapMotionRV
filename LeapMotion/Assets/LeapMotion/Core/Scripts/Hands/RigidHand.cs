@@ -24,6 +24,10 @@ namespace Leap.Unity {
     public Text feedback;
     public static int contadorAbducao = 0;
     public static int contadorLevant = 0;//esse é rpa levantar dedo
+    public static int contadorNumeroDeExercicios = 0;
+    public static bool bol = false;
+    public static bool[] exerciciosBolean = { true, false , false, false };
+    public static bool concluido = false;
     public static bool aux_texto_abd = true;
     public static bool aux_texto_levant = true;//esse é pra levantar dedo
     public override bool SupportsEditorPersistence() {
@@ -58,8 +62,7 @@ namespace Leap.Unity {
       for (int f = 0; f < fingers.Length; ++f) {
         if (fingers[f] != null) {
           fingers[f].UpdateFinger();
-          //Debug.Log("Dedo "+fingers[f].fingerType+ "Direcao"+ fingers[f].GetBoneDirection(3).ToString()+ "basis osso"+ fingers[f].GetBoneCenter(3));
-
+                    //Debug.Log("Dedo "+fingers[f].fingerType+ "Direcao"+ fingers[f].GetBoneDirection(3).ToString()+ "basis osso"+ fingers[f].GetBoneCenter(3));
                     if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_MIDDLE)
                         f1 = fingers[f];
                     if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_INDEX)
@@ -73,36 +76,62 @@ namespace Leap.Unity {
 
             //}
             //Debug.Log("Angulo:"+RadianToDegree(angulo));
+
+            if (Input.GetKeyDown("w") && concluido)
+            {
+                bol = !bol;
+                Debug.Log("bol:" + bol);
+                Debug.Log("Proximo exercicio");
+                exerciciosBolean[contadorNumeroDeExercicios] = false;
+                contadorNumeroDeExercicios++;
+                if (exerciciosBolean[contadorNumeroDeExercicios] != null)
+                {
+                    exerciciosBolean[contadorNumeroDeExercicios] = true;
+                }
+                else {
+                    Debug.Log("Parabens");
+                }
+
+            }
             if (f2 != null &&  f1 !=null)
             { //contar abdução dos dedos médio e indicador até 10
                 //texto está dando null pointer exception!!!
-                if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x)>0.02 && contadorAbducao<10 && aux_texto_abd)
+                if (exerciciosBolean[0])
                 {
-                    contadorAbducao++;
-                    feedback.enabled=false;
-                    aux_texto_abd = false;
-                    Debug.Log("Contador de movimentos: "+contadorAbducao);
-                }//else if(Mathf.Abs(f2.GetLeapFinger().TipPosition.y - f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).Basis.yBasis.y))
-                //{
+                    if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < 10 && aux_texto_abd)
+                    {
+                        contadorAbducao++;
+                        feedback.enabled = false;
+                        aux_texto_abd = false;
+                        Debug.Log("Contador de movimentos: " + contadorAbducao);
+                    }//else if(Mathf.Abs(f2.GetLeapFinger().TipPosition.y - f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).Basis.yBasis.y))
+                     //{
 
-                //}
-                if(Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x)< 0.02)
-                {
-                    aux_texto_abd = true;
-                }
-                if (contadorAbducao==10)
-                {
-                    feedback.enabled=true;
-                    contadorAbducao = 0;
+                    //}
+                    if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x) < 0.02)
+                    {
+                        aux_texto_abd = true;
+                    }
+                    if (contadorAbducao == 10)
+                    {
+                        concluido = true;
+                        feedback.enabled = true;
+                        contadorAbducao = 0;
+
+                    }
+                    /*if (contadorAbducao>10)
+                    {
+                        Debug.Log("Posicao ponta do indicador: " + f2.GetLeapFinger().TipPosition);
+
+                    }*/
+
+                } else if (exerciciosBolean[1]) {
+
+                } else if (exerciciosBolean[2]) {
+
+                } else if (exerciciosBolean[3]) {
 
                 }
-                /*if (contadorAbducao>10)
-                {
-                    Debug.Log("Posicao ponta do indicador: " + f2.GetLeapFinger().TipPosition);
-                   
-                }*/
-                
-                
             }
 
       if (palm != null) {
