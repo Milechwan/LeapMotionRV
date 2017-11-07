@@ -57,18 +57,24 @@ namespace Leap.Unity {
 
         public override void UpdateHand() {
             //Finger f1, f2;
-            FingerModel f1 = null, f2= null;
+            FingerModel f1 = null, f2= null, f3=null, f4=null, f5=null;
       //float angulo= 0.0f;
       for (int f = 0; f < fingers.Length; ++f) {
         if (fingers[f] != null) {
           fingers[f].UpdateFinger();
                     //Debug.Log("Dedo "+fingers[f].fingerType+ "Direcao"+ fingers[f].GetBoneDirection(3).ToString()+ "basis osso"+ fingers[f].GetBoneCenter(3));
                     if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_MIDDLE)
-                        f1 = fingers[f];
+                        f3 = fingers[f];
                     if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_INDEX)
                         f2 = fingers[f];
-                     //   Debug.Log("Angulo: " + produto_escalar();
-        }
+                    if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_THUMB)
+                        f1 = fingers[f];
+                    if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_RING)
+                        f4 = fingers[f];
+                    if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_PINKY)
+                        f5 = fingers[f];
+                    //   Debug.Log("Angulo: " + produto_escalar();
+                }
       }
             // if ((f1 != null) && (f2 != null))
             //{
@@ -84,31 +90,37 @@ namespace Leap.Unity {
                 Debug.Log("Proximo exercicio");
                 exerciciosBolean[contadorNumeroDeExercicios] = false;
                 contadorNumeroDeExercicios++;
-                if (exerciciosBolean[contadorNumeroDeExercicios] != null)
+                if (contadorNumeroDeExercicios < exerciciosBolean.Length)
                 {
                     exerciciosBolean[contadorNumeroDeExercicios] = true;
+                    concluido = false;
                 }
                 else {
                     Debug.Log("Parabens");
                 }
 
             }
-            if (f2 != null &&  f1 !=null)
+            if (f2 != null)//se um dedo é visível, os outros provavelmente estão visíveis - nosso setup fará com que todos estejam visíveis
             { //contar abdução dos dedos médio e indicador até 10
                 //texto está dando null pointer exception!!!
                 if (exerciciosBolean[0])
                 {
-                    if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < 10 && aux_texto_abd)
+                    if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < 10 &&
+                        Mathf.Abs(f3.GetLeapFinger().TipPosition.x - f4.GetLeapFinger().TipPosition.x) > 0.02 &&
+                        Mathf.Abs(f4.GetLeapFinger().TipPosition.x - f5.GetLeapFinger().TipPosition.x) > 0.02 &&
+                        aux_texto_abd)
                     {
                         contadorAbducao++;
                         feedback.enabled = false;
                         aux_texto_abd = false;
-                        Debug.Log("Contador de movimentos: " + contadorAbducao);
+                        Debug.Log("Contador de abrir-fechar: " + contadorAbducao);
                     }//else if(Mathf.Abs(f2.GetLeapFinger().TipPosition.y - f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).Basis.yBasis.y))
                      //{
 
                     //}
-                    if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f1.GetLeapFinger().TipPosition.x) < 0.02)
+                    if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) < 0.02 &&
+                        Mathf.Abs(f3.GetLeapFinger().TipPosition.x - f4.GetLeapFinger().TipPosition.x) < 0.02 &&
+                        Mathf.Abs(f4.GetLeapFinger().TipPosition.x - f5.GetLeapFinger().TipPosition.x) < 0.02)
                     {
                         aux_texto_abd = true;
                     }
@@ -126,7 +138,24 @@ namespace Leap.Unity {
                     }*/
 
                 } else if (exerciciosBolean[1]) {
-
+                    //exercício de levantar o dedo indicador - comparando posição no eixo y com dedo médio 
+                    if (Mathf.Abs(f2.GetLeapFinger().TipPosition.y- f3.GetLeapFinger().TipPosition.y)>0.05 && aux_texto_levant && contadorLevant<10)
+                    {
+                        aux_texto_levant = false;
+                        contadorLevant++;
+                        feedback.enabled = false;
+                        Debug.Log("Contador de levantamentos: " + contadorLevant);
+                    }
+                    if (f2.GetBoneDirection((int)Bone.BoneType.TYPE_DISTAL).y < 0.02)
+                    {
+                        aux_texto_levant = true;
+                    }
+                    if (contadorLevant == 10)
+                    {
+                        concluido = true;
+                        feedback.enabled = true;
+                        contadorLevant = 0;
+                    }
                 } else if (exerciciosBolean[2]) {
 
                 } else if (exerciciosBolean[3]) {
