@@ -12,6 +12,7 @@ using System.Collections;
 using Leap;
 using UnityEngine.UI;
 
+
 namespace Leap.Unity {
   /** A physics model for our rigid hand made out of various Unity Collider. */
   public class RigidHand : SkeletalHand {
@@ -22,6 +23,8 @@ namespace Leap.Unity {
     }
     public float filtering = 0.5f;
     public Text feedback;
+    public Text proximoExercicio;
+    public GameObject cuboProximoExercicio;
     public static int contadorAbducao = 0;
     public static int contadorLevant = 0;//esse é rpa levantar dedo
     public static int contadorNumeroDeExercicios = 0;
@@ -37,7 +40,7 @@ namespace Leap.Unity {
     public override void InitHand() {
       base.InitHand();
     }
-
+        
         public float produto_escalar(Vector3 vetor1, Vector3 vetor2)
         {
             float resultado = 0.0f;
@@ -105,6 +108,7 @@ namespace Leap.Unity {
                 //texto está dando null pointer exception!!!
                 if (exerciciosBolean[0])
                 {
+                  
                     if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < 10 &&
                         Mathf.Abs(f3.GetLeapFinger().TipPosition.x - f4.GetLeapFinger().TipPosition.x) > 0.02 &&
                         Mathf.Abs(f4.GetLeapFinger().TipPosition.x - f5.GetLeapFinger().TipPosition.x) > 0.02 &&
@@ -112,6 +116,8 @@ namespace Leap.Unity {
                     {
                         contadorAbducao++;
                         feedback.enabled = false;
+                        cuboProximoExercicio.SetActive(false);
+                        proximoExercicio.enabled = false;
                         aux_texto_abd = false;
                         Debug.Log("Contador de abrir-fechar: " + contadorAbducao);
                     }//else if(Mathf.Abs(f2.GetLeapFinger().TipPosition.y - f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).Basis.yBasis.y))
@@ -128,8 +134,11 @@ namespace Leap.Unity {
                     {
                         concluido = true;
                         feedback.enabled = true;
+                        cuboProximoExercicio.SetActive(true);
+                        proximoExercicio.enabled = true;
+                        cuboProximoExercicio.SetActive(true);
                         contadorAbducao = 0;
-
+                        proximoExercicio.enabled = true;
                     }
                     /*if (contadorAbducao>10)
                     {
@@ -144,6 +153,8 @@ namespace Leap.Unity {
                         aux_texto_levant = false;
                         contadorLevant++;
                         feedback.enabled = false;
+                        cuboProximoExercicio.SetActive(false);
+                        proximoExercicio.enabled = false;
                         Debug.Log("Contador de levantamentos: " + contadorLevant);
                     }
                     if (f2.GetBoneDirection((int)Bone.BoneType.TYPE_DISTAL).y < 0.02)
@@ -154,6 +165,8 @@ namespace Leap.Unity {
                     {
                         concluido = true;
                         feedback.enabled = true;
+                        cuboProximoExercicio.SetActive(true);
+                        proximoExercicio.enabled = true;
                         contadorLevant = 0;
                     }
                 } else if (exerciciosBolean[2]) {
