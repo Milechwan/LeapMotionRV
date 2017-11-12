@@ -1,15 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class colisaoCsharp : MonoBehaviour
 {
+    public Text booleano;
 
-    public static void OnCollisionEnter(Collision col)
+    void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.name == "bone1" || col.gameObject.name == "bone2" || col.gameObject.name == "bone3")
+        if (col.gameObject.name == "bone3")
         {
-            Debug.Log("contato");
+            //Debug.Log("contato");
+            booleano.text = "sim";
+            booleano.enabled = false;
+         
         }
     }
 
