@@ -37,6 +37,8 @@ namespace Leap.Unity {
     public bool DidStartPinch { get { return this.DidStartHold; } }
     public bool DidEndPinch { get { return this.DidRelease; } }
     public Text texto;
+    public Text contadorPinch;
+    public int temp = 0;
         
     protected bool _isPinching = false;
 
@@ -50,6 +52,7 @@ namespace Leap.Unity {
       ActivateDistance = Mathf.Max(0, ActivateDistance);
       DeactivateDistance = Mathf.Max(0, DeactivateDistance);
       texto.enabled = false;
+      contadorPinch.enabled = false;
       //Activate value cannot be less than deactivate value
       if (DeactivateDistance < ActivateDistance) {
         DeactivateDistance = ActivateDistance;
@@ -69,6 +72,7 @@ namespace Leap.Unity {
       
       if (hand == null || !_handModel.IsTracked) {
         texto.enabled = false;
+        contadorPinch.enabled = false;
         changeState(false);
         return;
       }
@@ -81,14 +85,19 @@ namespace Leap.Unity {
           
         if (_distance > DeactivateDistance) {
           texto.enabled = false;
+          contadorPinch.enabled = false;
           changeState(false);
           //return;
         }
       } else {
             //texto.enabled = false;
             if (_distance < ActivateDistance) {
-                //Debug.Log("pinchou");
+                    //Debug.Log("pinchou");
+                if (contadorPinch.text.Equals("0")) temp = 0;
                 texto.enabled=true;
+                temp = temp + 1;
+                Debug.Log("contPinch" + temp);
+                contadorPinch.text = temp.ToString();
                 changeState(true); 
             }
             //texto.enabled = false;

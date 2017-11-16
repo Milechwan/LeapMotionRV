@@ -27,11 +27,12 @@ namespace Leap.Unity {
     public Text conta_text_Abducao;
     public Text booleano_botao;
     public Text nome_exercicio;
-   
+    public Text conta_text_Pinch;
     public GameObject cuboProximoExercicio;
     public static int contadorAbducao = 0;
     public static int contadorLevant = 0;//esse é pra levantar dedo
     public static int contadorNumeroDeExercicios = 0;
+    public static int contadorPinch;
     //public static bool bol = false;
     public static bool[] exerciciosBolean = { true, false , false, false };
     public static bool concluido = false;
@@ -100,11 +101,17 @@ namespace Leap.Unity {
                 contadorNumeroDeExercicios++;
                 contadorAbducao = 0;
                 contadorLevant = 0;
+                conta_text_Pinch.text = "0";
+                if (nome_exercicio.text.Contains("levantamento"))
+                {
+                    nome_exercicio.text = "Contador de Pinch: ";
+                }
 
                 if (nome_exercicio.text.Contains("aducao"))
                 {
                     nome_exercicio.text = "Contador de levantamento: ";
                 }
+           
                 //System.Threading.Thread.Sleep(1000);
                 if (contadorNumeroDeExercicios < exerciciosBolean.Length)
                 {
@@ -192,7 +199,23 @@ namespace Leap.Unity {
                         proximoExercicio.enabled = true;
                     }
                 } else if (exerciciosBolean[2]) {
-
+                    
+                    if(contadorPinch < 10) {
+                        conta_text_Abducao.text = conta_text_Pinch.text;
+                        contadorPinch = int.Parse(conta_text_Pinch.text);
+                        exercicioConcluido.enabled = false;
+                        cuboProximoExercicio.SetActive(false);
+                        proximoExercicio.enabled = false;
+                    }
+                    
+                    if (contadorPinch == 10)
+                    {
+                        Debug.Log("ACABOU");
+                        concluido = true;
+                        exercicioConcluido.enabled = true;
+                        cuboProximoExercicio.SetActive(true);
+                        proximoExercicio.enabled = true;
+                    }
                 } else if (exerciciosBolean[3]) {
 
                 }
