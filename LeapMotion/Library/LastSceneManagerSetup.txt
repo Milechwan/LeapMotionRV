@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/cena_teste_pinchou_2.unity
+- path: Assets/cena_exercicios.unity
   isLoaded: 1
   isActive: 1
