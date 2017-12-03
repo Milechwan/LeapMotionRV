@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class pegaTexto : MonoBehaviour {
-    public InputField campoAbdu;
-    static string teste; 
-	// Use this for initialization
-	void Start () {
-        teste = campoAbdu.textComponent.text; 
-	}
+    string teste = "";
+    // Use this for initialization
+    void Start () {
+        //teste = comecarExercicio.passar;
+        Debug.Log("Abducao " + comecarExercicio.passarAbdAdu + " Levantamento "+ comecarExercicio.passarLevantamento + " Pinch "+ comecarExercicio.passarPinch);
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        Debug.Log(teste);
-	}
+      
+    }
 }

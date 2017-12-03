@@ -30,10 +30,13 @@ namespace Leap.Unity {
     public Text conta_text_Pinch;
     public GameObject cuboProximoExercicio;
     public static int contadorAbducao = 0;
+    public static int qtdAbducao = int.Parse(comecarExercicio.passarAbdAdu);
     public static int contadorLevant = 0;//esse é pra levantar dedo
+    public static int qtdLevantamento = int.Parse(comecarExercicio.passarLevantamento);
     public static int contadorNumeroDeExercicios = 0;
     public static int contadorPinch;
-    //public static bool bol = false;
+    public static int qtdPinch = int.Parse(comecarExercicio.passarPinch);
+  //public static bool bol = false;
     public static bool[] exerciciosBolean = { true, false , false, false };
     public static bool concluido = false;
     public static bool aux_texto_abd = true;
@@ -132,7 +135,7 @@ namespace Leap.Unity {
                 {
                     conta_text_Abducao.text = contadorAbducao.ToString();
 
-                    if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < 10 &&
+                    if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < qtdAbducao &&
                         Mathf.Abs(f3.GetLeapFinger().TipPosition.x - f4.GetLeapFinger().TipPosition.x) > 0.02 &&
                         Mathf.Abs(f4.GetLeapFinger().TipPosition.x - f5.GetLeapFinger().TipPosition.x) > 0.02 &&
                         aux_texto_abd)
@@ -155,7 +158,7 @@ namespace Leap.Unity {
                     {
                         aux_texto_abd = true;
                     }
-                    if (contadorAbducao == 10)
+                    if (contadorAbducao == qtdAbducao)
                     {
                         concluido = true;
                         exercicioConcluido.enabled = true;
@@ -176,7 +179,7 @@ namespace Leap.Unity {
                     //exercício de levantar o dedo indicador
                     conta_text_Abducao.text = contadorLevant.ToString();
 
-                    if (f2.GetBoneDirection((int)Bone.BoneType.TYPE_DISTAL).y > 0.04 && aux_texto_levant && contadorLevant<10)
+                    if (f2.GetBoneDirection((int)Bone.BoneType.TYPE_DISTAL).y > 0.04 && aux_texto_levant && contadorLevant< qtdLevantamento)
                     {
                         
                         aux_texto_levant = false;
@@ -191,7 +194,7 @@ namespace Leap.Unity {
                     {
                         aux_texto_levant = true;
                     }
-                    if (contadorLevant == 10)
+                    if (contadorLevant == qtdLevantamento)
                     {
                         concluido = true;  
                         exercicioConcluido.enabled = true;
@@ -200,7 +203,7 @@ namespace Leap.Unity {
                     }
                 } else if (exerciciosBolean[2]) {
                     
-                    if(contadorPinch < 10) {
+                    if(contadorPinch < qtdPinch) {
                         conta_text_Abducao.text = conta_text_Pinch.text;
                         contadorPinch = int.Parse(conta_text_Pinch.text);
                         exercicioConcluido.enabled = false;
@@ -208,7 +211,7 @@ namespace Leap.Unity {
                         proximoExercicio.enabled = false;
                     }
                     
-                    if (contadorPinch == 10)
+                    if (contadorPinch == qtdPinch)
                     {
                         Debug.Log("ACABOU");
                         concluido = true;
