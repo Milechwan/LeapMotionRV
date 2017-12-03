@@ -56,6 +56,13 @@ namespace Leap.Unity {
             return resultado;
         }
 
+        public float angulo_dedos(Bone b1, Bone b2)
+        {
+            Vector3 direcao1 = new Vector3(b1.NextJoint.x - b1.PrevJoint.x, b1.NextJoint.y - b1.PrevJoint.y, b1.NextJoint.z - b1.PrevJoint.z);
+            Vector3 direcao2 = new Vector3(b2.NextJoint.x - b2.PrevJoint.x, b2.NextJoint.y - b2.PrevJoint.y, b2.NextJoint.z - b2.PrevJoint.z);
+            return Mathf.Acos((produto_escalar(direcao1, direcao2)) / (modulo_vetor(direcao1) * modulo_vetor(direcao2)));
+        }
+
         public float modulo_vetor(Vector3 vet)
         {
             return Mathf.Sqrt(Mathf.Pow(vet.x, 2) + Mathf.Pow(vet.y, 2) + Mathf.Pow(vet.z, 2));
@@ -145,7 +152,7 @@ namespace Leap.Unity {
                         cuboProximoExercicio.SetActive(false);
                         proximoExercicio.enabled = false;
                         aux_texto_abd = false;
-                        
+                        Debug.Log(RadianToDegree(angulo_dedos(f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL), f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL))));
 
                         //Debug.Log("Contador de abrir-fechar: " + contadorAbducao);
                     }//else if(Mathf.Abs(f2.GetLeapFinger().TipPosition.y - f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).Basis.yBasis.y))
