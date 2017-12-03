@@ -41,6 +41,10 @@ namespace Leap.Unity {
     public static bool concluido = false;
     public static bool aux_texto_abd = true;
     public static bool aux_texto_levant = true;//esse é pra levantar dedo
+    int contadorPinchInd = 0;
+    int contadorPinchMed = 0;
+    int contadorPinchAnl = 0;
+    int contadorPinchMindi = 0;
     public override bool SupportsEditorPersistence() {
       return true;
     }
@@ -48,6 +52,16 @@ namespace Leap.Unity {
     public override void InitHand() {
       base.InitHand();
     }
+        public bool pinchouDedos(Vector3 b1, Vector3 b2)
+        {
+            bool retorno = false;
+            Vector3 distancia = new Vector3(b1.x - b2.x, b1.y - b2.y, b1.z - b2.z);
+            if (distancia.x<0.01||distancia.y<0.01)
+            {
+                retorno = true;
+            }
+            return retorno;
+        }
         
         public float produto_escalar(Vector3 vetor1, Vector3 vetor2)
         {
@@ -209,16 +223,44 @@ namespace Leap.Unity {
                         proximoExercicio.enabled = true;
                     }
                 } else if (exerciciosBolean[2]) {
-                    
-                    if(contadorPinch < qtdPinch) {
-                        conta_text_Abducao.text = conta_text_Pinch.text;
-                        contadorPinch = int.Parse(conta_text_Pinch.text);
+                    //contadores auxiliares para pinça em cada dedo
+
+                    if (contadorPinch < 4*qtdPinch) {//multiplicado por 4 pois será dito como concluído quando terminar com todos os dedos
+                        if (contadorPinchInd<qtdPinch)//indicador - usa o PinchDetector do LeapMotion, que já é calibrado para ele 
+                        {
+                            conta_text_Abducao.text = conta_text_Pinch.text;
+                            contadorPinch = int.Parse(conta_text_Pinch.text);
+                            contadorPinchInd = int.Parse(conta_text_Pinch.text);
+                        }
+                        //dedo médio
+                        if (contadorPinchMed<qtdPinch && pinchouDedos(f3.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL)))
+                        {
+                            contadorPinch++;
+                            contadorPinchMed++;
+                            Debug.Log("Pinchou médio: " + contadorPinchMed.ToString());
+                        }
+                        //anelar
+                        if (contadorPinchAnl < qtdPinch && pinchouDedos(f4.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL)))
+                        {
+                            contadorPinch++;
+                            contadorPinchAnl++;
+                            Debug.Log("Pinchou anelar: " + contadorPinchAnl.ToString());
+                        }
+                        //mindinho
+                        if (contadorPinchMindi < qtdPinch && pinchouDedos(f5.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL)))
+                        {
+                            contadorPinch++;
+                            contadorPinchMindi++;
+                            Debug.Log("Pinchou mindinho: "+contadorPinchMindi.ToString());
+                            Debug.Log("Contador global: "+contadorPinch);
+                        }
+
                         exercicioConcluido.enabled = false;
                         cuboProximoExercicio.SetActive(false);
                         proximoExercicio.enabled = false;
                     }
                     
-                    if (contadorPinch == qtdPinch)
+                    if (contadorPinch == 4*qtdPinch)
                     {
                         Debug.Log("ACABOU");
                         concluido = true;
