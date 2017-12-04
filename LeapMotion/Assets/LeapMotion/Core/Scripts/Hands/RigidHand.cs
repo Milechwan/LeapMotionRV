@@ -130,7 +130,7 @@ namespace Leap.Unity {
                 conta_text_Pinch.text = "0";
                 if (nome_exercicio.text.Contains("levantamento"))
                 {
-                    nome_exercicio.text = "Contador de Pinch: ";
+                    nome_exercicio.text = "Contador de Pinch Indicador: ";
                 }
 
                 if (nome_exercicio.text.Contains("aducao"))
@@ -228,43 +228,49 @@ namespace Leap.Unity {
                     //contadores auxiliares para pinça em cada dedo
 
                     if (contadorPinchInd+ contadorPinchAnl + contadorPinchMed+ contadorPinchMindi < 4*qtdPinch) {//multiplicado por 4 pois será dito como concluído quando terminar com todos os dedos
-                        if (contadorPinchInd <= qtdPinch && PinchBolean[0] && auxiliarPinch)//indicador - usa o PinchDetector do LeapMotion, que já é calibrado para ele 
+                        if (contadorPinchInd < qtdPinch && PinchBolean[0] && auxiliarPinch)//indicador - usa o PinchDetector do LeapMotion, que já é calibrado para ele 
                         {
                             if ((qtdPinch - contadorPinchInd) == 1) { PinchBolean[0] = false; PinchBolean[1] = true; }
-                            conta_text_Abducao.text = conta_text_Pinch.text;
                             contadorPinch = int.Parse(conta_text_Pinch.text);
+                            Debug.Log("conta_text_Pinch"+conta_text_Pinch.text);
                             contadorPinchInd = int.Parse(conta_text_Pinch.text);
+                            Debug.Log("contadorPinchInd" + contadorPinchInd.ToString());
                             auxiliarPinch = false;
+                            conta_text_Abducao.text = contadorPinchInd.ToString();
                         }
                         //dedo médio
                         else if (contadorPinchMed < qtdPinch && pinchouDedos(f3.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL)) && PinchBolean[1] && auxiliarPinch)
                         {
                             if ((qtdPinch - contadorPinchMed) == 1) { PinchBolean[1] = false; PinchBolean[2] = true; }
-                            contadorPinch++;
+                            nome_exercicio.text = "Contador de Pinch Medio: ";
                             contadorPinchMed++;
                             Debug.Log("Pinchou médio: " + contadorPinchMed.ToString());
+                            Debug.Log("conta_text_Pinch" + conta_text_Pinch.text);
                             auxiliarPinch = false;
+                            conta_text_Abducao.text = contadorPinchMed.ToString();
                         }
                         else if (!pinchouDedos(f3.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL))) auxiliarPinch = true;
                         //anelar
                         else if (contadorPinchAnl < qtdPinch && pinchouDedos(f4.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL)) && PinchBolean[2] && auxiliarPinch)
                         {
                             if ((qtdPinch - contadorPinchAnl) == 1) { PinchBolean[2] = false; PinchBolean[3] = true; }
-                            contadorPinch++;
+                            nome_exercicio.text = "Contador de Pinch Anelar: ";
                             contadorPinchAnl++;
                             Debug.Log("Pinchou anelar: " + contadorPinchAnl.ToString());
                             auxiliarPinch = false;
+                            conta_text_Abducao.text = contadorPinchAnl.ToString();
                         }
                         else if (!pinchouDedos(f3.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL))) auxiliarPinch = true;
                         //mindinho
                         else if (contadorPinchMindi < qtdPinch && pinchouDedos(f5.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL)) && PinchBolean[3] && auxiliarPinch)
                         {
                             if ((qtdPinch - contadorPinchMindi) == 1) { PinchBolean[3] = false; PinchBolean[0] = true; }
-                            contadorPinch++;
+                            nome_exercicio.text = "Contador de Pinch Mindinho: ";
                             contadorPinchMindi++;
                             Debug.Log("Pinchou mindinho: " + contadorPinchMindi.ToString());
-                            Debug.Log("Contador global: " + contadorPinch);
                             auxiliarPinch = false;
+                            conta_text_Abducao.text = contadorPinchMindi.ToString();
+                            Debug.Log("Ind " + contadorPinchInd + " Med " + contadorPinchMed + " Anl " + contadorPinchAnl + " Mindi " + contadorPinchMindi);
                         }
                         else if (!pinchouDedos(f3.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL))) auxiliarPinch = true;
 
@@ -273,7 +279,7 @@ namespace Leap.Unity {
                         proximoExercicio.enabled = false;
                     }
                     
-                    if (contadorPinch == 4*qtdPinch)
+                    if ((contadorPinchInd == 5) && (contadorPinchAnl == 5) && (contadorPinchMed == 5) && (contadorPinchMindi == 5))
                     {
                         Debug.Log("ACABOU");
                         concluido = true;
