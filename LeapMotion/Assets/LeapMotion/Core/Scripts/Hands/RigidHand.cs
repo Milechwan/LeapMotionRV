@@ -29,6 +29,7 @@ namespace Leap.Unity {
     public Text nome_exercicio;
     public Text conta_text_Pinch;
     public GameObject cuboProximoExercicio;
+    public RawImage info_exercicio;
     public static int contadorAbducao = 0;
     public static int qtdAbducao = int.Parse(comecarExercicio.passarAbdAdu);
     public static int contadorLevant = 0;//esse é pra levantar dedo
@@ -110,13 +111,7 @@ namespace Leap.Unity {
                     //   Debug.Log("Angulo: " + produto_escalar();
                 }
             }
-            // if ((f1 != null) && (f2 != null))
-            //{
-            //  angulo = Mathf.Acos((produto_escalar(f1.GetBoneDirection(3), f2.GetBoneDirection(3))) / (modulo_vetor(f1.GetBoneDirection(3)) * modulo_vetor(f2.GetBoneDirection(3))));
-
-            //}
-            //Debug.Log("Angulo:"+RadianToDegree(angulo));
-
+           
             if (booleano_botao.text.Equals("sim") && concluido)
             {
                 //bol = !bol;
@@ -131,11 +126,15 @@ namespace Leap.Unity {
                 if (nome_exercicio.text.Contains("levantamento"))
                 {
                     nome_exercicio.text = "Contador de Pinch Indicador: ";
+                    info_exercicio.enabled = true;
+                    info_exercicio.texture = (Texture)Resources.Load("rv_instru_pinca");
                 }
 
                 if (nome_exercicio.text.Contains("aducao"))
                 {
                     nome_exercicio.text = "Contador de levantamento: ";
+                    info_exercicio.enabled = true;
+                    info_exercicio.texture = (Texture)Resources.Load("rv_instru_levant");
                 }
            
                 //System.Threading.Thread.Sleep(1000);
@@ -157,6 +156,7 @@ namespace Leap.Unity {
                 if (exerciciosBolean[0])
                 {
                     conta_text_Abducao.text = contadorAbducao.ToString();
+                    info_exercicio.enabled = true;
 
                     if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < qtdAbducao &&
                         Mathf.Abs(f3.GetLeapFinger().TipPosition.x - f4.GetLeapFinger().TipPosition.x) > 0.02 &&
@@ -184,6 +184,7 @@ namespace Leap.Unity {
                     if (contadorAbducao == qtdAbducao)
                     {
                         concluido = true;
+                        info_exercicio.enabled = false;
                         exercicioConcluido.enabled = true;
                         cuboProximoExercicio.SetActive(true);
                         proximoExercicio.enabled = true;
@@ -219,6 +220,7 @@ namespace Leap.Unity {
                     }
                     if (contadorLevant == qtdLevantamento)
                     {
+                        info_exercicio.enabled = false;
                         concluido = true;  
                         exercicioConcluido.enabled = true;
                         cuboProximoExercicio.SetActive(true);
