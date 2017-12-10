@@ -8,7 +8,7 @@ public class pegaTexto : MonoBehaviour {
     // Use this for initialization
     void Start () {
         //teste = comecarExercicio.passar;
-        Debug.Log("Abducao " + comecarExercicio.passarAbdAdu + " Levantamento "+ comecarExercicio.passarLevantamento + " Pinch "+ comecarExercicio.passarPinch);
+        //Debug.Log("Abducao " + comecarExercicio.passarAbdAdu + " Levantamento "+ comecarExercicio.passarLevantamento + " Pinch "+ comecarExercicio.passarPinch);
     }
 	
 	// Update is called once per frame
