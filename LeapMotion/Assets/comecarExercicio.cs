@@ -36,6 +36,9 @@ public class comecarExercicio : MonoBehaviour {
         else return t;
     }
 
+    public static void passarMenu() {
+        SceneManager.DestroyOnLoadScene("cena_menu");
+    }
     void exercicio()
     {
         passAbdAduInd = i1.text;
