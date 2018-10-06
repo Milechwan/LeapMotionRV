@@ -37,7 +37,7 @@ public class comecarExercicio : MonoBehaviour {
     }
 
     public static void passarMenu() {
-        SceneManager.DestroyOnLoadScene("cena_menu");
+        SceneManager.UnloadSceneAsync("cena_menu");
     }
     void exercicio()
     {

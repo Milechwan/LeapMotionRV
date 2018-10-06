@@ -1,6 +1,6 @@
 /******************************************************************************
- * Copyright (C) Leap Motion, Inc. 2011-2017.                                 *
- * Leap Motion proprietary and  confidential.                                 *
+ * Copyright (C) Leap Motion, Inc. 2011-2018.                                 *
+ * Leap Motion proprietary and confidential.                                  *
  *                                                                            *
  * Use subject to the terms of the Leap Motion SDK Agreement available at     *
  * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
@@ -14,15 +14,11 @@ using Leap.Unity.Attributes;
 
 namespace Leap.Unity {
   /** A basic Leap hand model constructed dynamically vs. using pre-existing geometry*/
-  public class CapsuleHand : IHandModel {
+  public class CapsuleHand : HandModelBase {
     private const int TOTAL_JOINT_COUNT = 4 * 5;
     private const float CYLINDER_MESH_RESOLUTION = 0.1f; //in centimeters, meshes within this resolution will be re-used
     private const int THUMB_BASE_INDEX = (int)Finger.FingerType.TYPE_THUMB * 4;
     private const int PINKY_BASE_INDEX = (int)Finger.FingerType.TYPE_PINKY * 4;
-
-    private const float SPHERE_RADIUS = 0.008f;
-    private const float CYLINDER_RADIUS = 0.006f;
-    private const float PALM_RADIUS = 0.015f;
 
     private static int _leftColorIndex = 0;
     private static int _rightColorIndex = 0;
@@ -33,7 +29,10 @@ namespace Leap.Unity {
     private Chirality handedness;
 
     [SerializeField]
-    private bool _showArm = true;
+    private bool _showArm = false;
+
+    [SerializeField]
+    private bool _castShadows = true;
 
     [SerializeField]
     private Material _material;
@@ -45,9 +44,23 @@ namespace Leap.Unity {
     [SerializeField]
     private int _cylinderResolution = 12;
 
+    [MinValue(0)]
+    [SerializeField]
+    private float _jointRadius = 0.008f;
+
+    [MinValue(0)]
+    [SerializeField]
+    private float _cylinderRadius = 0.006f;
+
+    [MinValue(0)]
+    [SerializeField]
+    private float _palmRadius = 0.015f;
+
     private Material _sphereMat;
     private Hand _hand;
     private Vector3[] _spherePositions;
+        //tentando passar a mão para script de RigidHand
+       // public static Hand mao;
 
     public override ModelType HandModelType {
       get {
@@ -72,7 +85,13 @@ namespace Leap.Unity {
 
     public override void SetLeapHand(Hand hand) {
       _hand = hand;
+       //mao = _hand;
     }
+
+   /* public static Hand getHandForRigidHand()
+        {
+            return mao;
+        }*/
 
     public override void InitHand() {
       if (_material != null) {
@@ -123,18 +142,16 @@ namespace Leap.Unity {
       //PalmPos, WristPos, and mockThumbJointPos, which is derived and not taken from the frame obj
 
       Vector3 palmPosition = _hand.PalmPosition.ToVector3();
-      drawSphere(palmPosition, PALM_RADIUS);
-
-      Vector3 wristPos = _hand.PalmPosition.ToVector3();
-      drawSphere(wristPos);
+      drawSphere(palmPosition, _palmRadius);
 
       Vector3 thumbBaseToPalm = _spherePositions[THUMB_BASE_INDEX] - _hand.PalmPosition.ToVector3();
       Vector3 mockThumbJointPos = _hand.PalmPosition.ToVector3() + Vector3.Reflect(thumbBaseToPalm, _hand.Basis.xBasis.ToVector3());
       drawSphere(mockThumbJointPos);
 
       //If we want to show the arm, do the calculations and display the meshes
-      if (_showArm) {
+      /*if (_showArm) {
         var arm = _hand.Arm;
+
         Vector3 right = arm.Basis.xBasis.ToVector3() * arm.Width * 0.7f * 0.5f;
         Vector3 wrist = arm.WristPosition.ToVector3();
         Vector3 elbow = arm.ElbowPosition.ToVector3();
@@ -156,7 +173,7 @@ namespace Leap.Unity {
         drawCylinder(armBackLeft, armBackRight);
         drawCylinder(armFrontLeft, armBackLeft);
         drawCylinder(armFrontRight, armBackRight);
-      }
+      }*/
 
       //Draw cylinders between finger joints
       for (int i = 0; i < 5; i++) {
@@ -187,18 +204,30 @@ namespace Leap.Unity {
       drawCylinder(mockThumbJointPos, PINKY_BASE_INDEX);
     }
 
-    private void drawSphere(Vector3 position, float radius = SPHERE_RADIUS) {
+    private void drawSphere(Vector3 position) {
+      drawSphere(position, _jointRadius);
+    }
+
+    private void drawSphere(Vector3 position, float radius) {
       //multiply radius by 2 because the default unity sphere has a radius of 0.5 meters at scale 1.
-      Graphics.DrawMesh(_sphereMesh, Matrix4x4.TRS(position, Quaternion.identity, Vector3.one * radius * 2.0f), _sphereMat, 0);
+      Graphics.DrawMesh(_sphereMesh, 
+                        Matrix4x4.TRS(position, 
+                                      Quaternion.identity, 
+                                      Vector3.one * radius * 2.0f * transform.lossyScale.x), 
+                        _sphereMat, 0, 
+                        null, 0, null, _castShadows);
     }
 
     private void drawCylinder(Vector3 a, Vector3 b) {
       float length = (a - b).magnitude;
 
       Graphics.DrawMesh(getCylinderMesh(length),
-                        Matrix4x4.TRS(a, Quaternion.LookRotation(b - a), Vector3.one),
+                        Matrix4x4.TRS(a, 
+                                      Quaternion.LookRotation(b - a), 
+                                      new Vector3(transform.lossyScale.x, transform.lossyScale.x, 1)),
                         _material,
-                        gameObject.layer);
+                        gameObject.layer, 
+                        null, 0, null, _castShadows);
     }
 
     private void drawCylinder(int a, int b) {
@@ -234,13 +263,13 @@ namespace Leap.Unity {
       Vector3 p1 = Vector3.forward * length;
       for (int i = 0; i < _cylinderResolution; i++) {
         float angle = (Mathf.PI * 2.0f * i) / _cylinderResolution;
-        float dx = CYLINDER_RADIUS * Mathf.Cos(angle);
-        float dy = CYLINDER_RADIUS * Mathf.Sin(angle);
+        float dx = _cylinderRadius * Mathf.Cos(angle);
+        float dy = _cylinderRadius * Mathf.Sin(angle);
 
         Vector3 spoke = new Vector3(dx, dy, 0);
 
-        verts.Add((p0 + spoke) * transform.lossyScale.x);
-        verts.Add((p1 + spoke) * transform.lossyScale.x);
+        verts.Add(p0 + spoke);
+        verts.Add(p1 + spoke);
 
         colors.Add(Color.white);
         colors.Add(Color.white);

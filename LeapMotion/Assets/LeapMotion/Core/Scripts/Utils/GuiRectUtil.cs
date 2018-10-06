@@ -1,6 +1,6 @@
 /******************************************************************************
- * Copyright (C) Leap Motion, Inc. 2011-2017.                                 *
- * Leap Motion proprietary and  confidential.                                 *
+ * Copyright (C) Leap Motion, Inc. 2011-2018.                                 *
+ * Leap Motion proprietary and confidential.                                  *
  *                                                                            *
  * Use subject to the terms of the Leap Motion SDK Agreement available at     *
  * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
@@ -30,6 +30,24 @@ namespace Leap.Unity {
 
     public static Vector3 Corner11(this Rect rect) {
       return new Vector3(rect.x + rect.width, rect.y + rect.height);
+    }
+
+    public static Rect Encapsulate(this Rect rect, Vector2 point) {
+      if (point.x < rect.x) {
+        rect.width += rect.x - point.x;
+        rect.x = point.x;
+      } else if (point.x > rect.x + rect.width) {
+        rect.width = point.x - rect.x;
+      }
+
+      if (point.y < rect.y) {
+        rect.height += rect.y - point.y;
+        rect.y = point.y;
+      } else if (point.y > rect.y + rect.height) {
+        rect.height = point.y - rect.y;
+      }
+
+      return rect;
     }
 
     public static void SplitHorizontally(this Rect rect, out Rect left, out Rect right) {

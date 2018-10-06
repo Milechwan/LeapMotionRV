@@ -1,6 +1,6 @@
 /******************************************************************************
- * Copyright (C) Leap Motion, Inc. 2011-2017.                                 *
- * Leap Motion proprietary and  confidential.                                 *
+ * Copyright (C) Leap Motion, Inc. 2011-2018.                                 *
+ * Leap Motion proprietary and confidential.                                  *
  *                                                                            *
  * Use subject to the terms of the Leap Motion SDK Agreement available at     *
  * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
@@ -11,11 +11,10 @@ using UnityEngine;
 using Leap.Unity.Attributes;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-
 namespace Leap.Unity {
 
   /// <summary>
-  /// A basic utility class to aid in creating pinch based actions.  Once linked with an IHandModel, it can
+  /// A basic utility class to aid in creating pinch based actions.  Once linked with a HandModelBase, it can
   /// be used to detect pinch gestures that the hand makes.
   /// </summary>
   public class PinchDetector : AbstractHoldDetector {
@@ -36,10 +35,7 @@ namespace Leap.Unity {
     public bool IsPinching { get { return this.IsHolding; } }
     public bool DidStartPinch { get { return this.DidStartHold; } }
     public bool DidEndPinch { get { return this.DidRelease; } }
-    public Text texto;
-    public Text contadorPinch;
-    public int temp = 0;
-        
+
     protected bool _isPinching = false;
 
     protected float _lastPinchTime = 0.0f;
@@ -48,19 +44,26 @@ namespace Leap.Unity {
     protected Vector3 _pinchPos;
     protected Quaternion _pinchRotation;
 
+    public Text texto;
+    public Text contadorPinch;
+    public int temp = 0;
     protected virtual void OnValidate() {
       ActivateDistance = Mathf.Max(0, ActivateDistance);
       DeactivateDistance = Mathf.Max(0, DeactivateDistance);
-      texto.enabled = false;
-      contadorPinch.enabled = false;
+
       //Activate value cannot be less than deactivate value
       if (DeactivateDistance < ActivateDistance) {
         DeactivateDistance = ActivateDistance;
       }
     }
 
+    private float GetPinchDistance(Hand hand) {
+      var indexTipPosition = hand.GetIndex().TipPosition.ToVector3();
+      var thumbTipPosition = hand.GetThumb().TipPosition.ToVector3();
+      return Vector3.Distance(indexTipPosition, thumbTipPosition);
+    }
+
     protected override void ensureUpToDate() {
-      //texto.enabled = false;
       if (Time.frameCount == _lastUpdateFrame) {
         return;
       }
@@ -69,7 +72,7 @@ namespace Leap.Unity {
       _didChange = false;
 
       Hand hand = _handModel.GetLeapHand();
-      
+
       if (hand == null || !_handModel.IsTracked) {
         texto.enabled = false;
         contadorPinch.enabled = false;
@@ -77,30 +80,26 @@ namespace Leap.Unity {
         return;
       }
 
-      _distance = hand.PinchDistance * MM_TO_M;
+      _distance = GetPinchDistance(hand);
       _rotation = hand.Basis.CalculateRotation();
       _position = ((hand.Fingers[0].TipPosition + hand.Fingers[1].TipPosition) * .5f).ToVector3();
 
       if (IsActive) {
-          
         if (_distance > DeactivateDistance) {
-          texto.enabled = false;
-          contadorPinch.enabled = false;
-          changeState(false);
+            texto.enabled = false;
+            contadorPinch.enabled = false;
+            changeState(false);
           //return;
         }
       } else {
-            //texto.enabled = false;
-            if (_distance < ActivateDistance) {
-                    //Debug.Log("pinchou");
-                if (contadorPinch.text.Equals("0")) temp = 0;
-                texto.enabled=true;
-                temp = temp + 1;
-                Debug.Log("contPinch" + temp);
-                contadorPinch.text = temp.ToString();
-                changeState(true); 
-            }
-            //texto.enabled = false;
+        if (_distance < ActivateDistance) {
+            if (contadorPinch.text.Equals("0")) temp = 0;
+            texto.enabled = true;
+            temp = temp + 1;
+            Debug.Log("contPinch" + temp);
+            contadorPinch.text = temp.ToString();
+            changeState(true);
+        }
       }
 
       if (IsActive) {
@@ -115,7 +114,6 @@ namespace Leap.Unity {
         transform.rotation = _rotation;
       }
     }
- 
 
 #if UNITY_EDITOR
     protected override void OnDrawGizmos () {

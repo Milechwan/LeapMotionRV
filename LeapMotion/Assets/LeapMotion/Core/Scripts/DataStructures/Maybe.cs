@@ -1,12 +1,22 @@
-﻿using System;
+/******************************************************************************
+ * Copyright (C) Leap Motion, Inc. 2011-2018.                                 *
+ * Leap Motion proprietary and confidential.                                  *
+ *                                                                            *
+ * Use subject to the terms of the Leap Motion SDK Agreement available at     *
+ * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
+ * between Leap Motion and you, your company or other organization.           *
+ ******************************************************************************/
+
+using System;
 
 namespace Leap.Unity {
+  using Query;
 
   public static class Maybe {
     public static readonly NoneType None = new NoneType();
 
     public static Maybe<T> Some<T>(T value) {
-      return Maybe<T>.Some(value);
+      return new Maybe<T>(value);
     }
 
     public static void MatchAll<A, B>(Maybe<A> maybeA, Maybe<B> maybeB, Action<A, B> action) {
@@ -55,7 +65,7 @@ namespace Leap.Unity {
     public readonly static Maybe<T> None = new Maybe<T>();
 
     /// <summary>
-    /// Returns whether or not this Maybe contains a value or not.
+    /// Returns whether or not this Maybe contains a value.
     /// </summary>
     public readonly bool hasValue;
 
@@ -75,20 +85,25 @@ namespace Leap.Unity {
     private readonly T _t;
 
     /// <summary>
-    /// Constructs a Maybe given a value.  If the value is non-null, this maybe
-    /// will have a value.  If the value is null, this maybe will have no value.
+    /// Constructs a Maybe given a value. If the value is not null, this maybe will have
+    /// a value. If the value is null, this maybe will have no value. For value types,
+    /// the Maybe struct will always have a value. (Use Maybe.None to refer to "no value.")
     /// </summary>
     public Maybe(T t) {
-      hasValue = t != null;
+      if (Type<T>.isValueType) {
+        hasValue = true;
+      } else {
+        hasValue = t != null;
+      }
       _t = t;
     }
 
     /// <summary>
-    /// Constructs a Maybe given a specific value.  This value needs to always be
-    /// non-null.
+    /// Constructs a Maybe given a specific value. This value needs to always be
+    /// non-null if the type is a reference type.
     /// </summary>
     public static Maybe<T> Some(T t) {
-      if (t == null) {
+      if (!Type<T>.isValueType && t == null) {
         throw new ArgumentNullException("Cannot use Some with a null argument.");
       }
 
@@ -122,6 +137,57 @@ namespace Leap.Unity {
         if (ifValue != null) ifValue(_t);
       } else {
         ifNot();
+      }
+    }
+
+    /// <summary>
+    /// If this Maybe has a value, the first delegate is called with that value,
+    /// else the second delegate is called.
+    /// </summary>
+    public K Match<K>(Func<T, K> ifValue, Func<K> ifNot) {
+      if (hasValue) {
+        if (ifValue != null) {
+          return ifValue(_t);
+        } else {
+          return default(K);
+        }
+      } else {
+        return ifNot();
+      }
+    }
+
+    /// <summary>
+    /// If this Maybe has a value, returns the value, otherwise returns the argument
+    /// custom default value.
+    /// </summary>
+    public T ValueOr(T customDefault) {
+      if (hasValue) {
+        return _t;
+      } else {
+        return customDefault;
+      }
+    }
+
+    /// <summary>
+    /// Returns this Maybe if it has a value, otherwise returns the argument Maybe value.
+    /// Useful for overlaying multiple Maybe values.
+    /// For example, if I want to overlay a "maybe override font" variable with
+    /// another "maybe override font" variable, I can call:
+    /// this.font = other.font.ValueOr(this.font);
+    /// </summary>
+    public Maybe<T> ValueOr(Maybe<T> maybeCustomDefault) {
+      if (hasValue) {
+        return this;
+      } else {
+        return maybeCustomDefault;
+      }
+    }
+
+    public Query<T> Query() {
+      if (hasValue) {
+        return Values.Single(_t);
+      } else {
+        return Values.Empty<T>();
       }
     }
 
@@ -204,7 +270,7 @@ namespace Leap.Unity {
     }
 
     public static implicit operator Maybe<T>(Maybe.NoneType none) {
-      return Maybe<T>.None;
+      return None;
     }
   }
 }

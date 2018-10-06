@@ -1,6 +1,6 @@
-/******************************************************************************
- * Copyright (C) Leap Motion, Inc. 2011-2017.                                 *
- * Leap Motion proprietary and  confidential.                                 *
+ï»¿/******************************************************************************
+ * Copyright (C) Leap Motion, Inc. 2011-2018.                                 *
+ * Leap Motion proprietary and confidential.                                  *
  *                                                                            *
  * Use subject to the terms of the Leap Motion SDK Agreement available at     *
  * https://developer.leapmotion.com/sdk_agreement, or another agreement       *
@@ -12,21 +12,17 @@ using System.Collections;
 using Leap;
 using UnityEngine.UI;
 
-
-namespace Leap.Unity
-{
-    /** A physics model for our rigid hand made out of various Unity Collider. */
-    public class RigidHand : SkeletalHand
-    {
-        public override ModelType HandModelType
-        {
-            get
-            {
-                return ModelType.Physics;
-            }
-        }
+namespace Leap.Unity {
+  /** A physics model for our rigid hand made out of various Unity Collider. */
+  public class RigidHand : SkeletalHand {
+    public override ModelType HandModelType {
+      get {
+        return ModelType.Physics;
+      }
+    }
+    public float filtering = 0.5f;
+        //variÃ¡veis para o projeto
         public RawImage info_exercicio;
-        public float filtering = 0.5f;
         public Text exercicioConcluido;
         public Text proximoExercicio;
         public Text conta_text_Abducao;
@@ -35,45 +31,45 @@ namespace Leap.Unity
         public Text conta_text_Pinch;
         public GameObject cuboProximoExercicio;
         public static int contadorAbducao = 0;
-        public static int qtdAbducao = int.Parse(comecarExercicio.passAbdAduInd);// vai tirar depois
-        public static int qtdAbdInd = int.Parse(comecarExercicio.passAbdAduInd);
-        public static int qtdAbdMed = int.Parse(comecarExercicio.passAbdAduMed);
-        public static int qtdAbdAnl = int.Parse(comecarExercicio.passAbdAduAnl);
-        public static int qtdAbdMindi = int.Parse(comecarExercicio.passAbdAduMindi);
-        public static int contadorLevant = 0;//esse é pra levantar dedo
-        public static int qtdLevantamento = int.Parse(comecarExercicio.passarLevantamento);
+        public static int qtdAbducao = int.Parse(comecarExercicio.passAbdAduInd==null? "0" : comecarExercicio.passAbdAduInd);// vai tirar depois
+        public static int qtdAbdInd = int.Parse(comecarExercicio.passAbdAduInd==null? "0" : comecarExercicio.passAbdAduInd);
+        public static int qtdAbdMed = int.Parse(comecarExercicio.passAbdAduMed==null ? "0" : comecarExercicio.passAbdAduMed);
+        public static int qtdAbdAnl = int.Parse(comecarExercicio.passAbdAduAnl==null? "0" : comecarExercicio.passAbdAduAnl);
+        public static int qtdAbdMindi = int.Parse(comecarExercicio.passAbdAduMindi==null? "0" : comecarExercicio.passAbdAduMindi);
+        public static int contadorLevant = 0;//esse ï¿½ pra levantar dedo
+        public static int qtdLevantamento = int.Parse(comecarExercicio.passarLevantamento==null? "0" : comecarExercicio.passarLevantamento);
         public static int contadorNumeroDeExercicios = 0;
         public static int contadorPinch;
-        public static int qtdPinch = int.Parse(comecarExercicio.passPinchInd);// vai tirar depois
-        public static int qtdPinchInd = int.Parse(comecarExercicio.passPinchInd);
-        public static int qtdPinchMed = int.Parse(comecarExercicio.passPinchMed);
-        public static int qtdPinchAnl = int.Parse(comecarExercicio.passPinchAnl);
-        public static int qtdPinchMindi = int.Parse(comecarExercicio.passPinchMindi);
+        public static int qtdPinch = int.Parse(comecarExercicio.passPinchInd==null? "0" : comecarExercicio.passPinchInd);// vai tirar depois
+        public static int qtdPinchInd = int.Parse(comecarExercicio.passPinchInd==null? "0" : comecarExercicio.passPinchInd);
+        public static int qtdPinchMed = int.Parse(comecarExercicio.passPinchMed==null? "0" : comecarExercicio.passPinchMed);
+        public static int qtdPinchAnl = int.Parse(comecarExercicio.passPinchAnl==null? "0" : comecarExercicio.passPinchAnl);
+        public static int qtdPinchMindi = int.Parse(comecarExercicio.passPinchMindi==null? "0" : comecarExercicio.passPinchMindi);
         //public static bool bol = false;
         public static bool[] exerciciosBolean = { true, false, false, false, false, false, false, false, false };
         public static bool[] PinchBolean = { true, false, false, false };
         public static bool concluido = false;
         public static bool aux_texto_abd = true;
-        public static bool aux_texto_levant = true;//esse é pra levantar dedo
+        public static bool aux_texto_levant = true;//esse ï¿½ pra levantar dedo
         public static bool auxiliarPinch = true;
         public static int contadorPinchInd = 0;
         public static int contadorPinchMed = 0;
         public static int contadorPinchAnl = 0;
         public static int contadorPinchMindi = 0;
-        public override bool SupportsEditorPersistence()
-        {
-            return true;
-        }
+       
 
-        public override void InitHand()
-        {
-            base.InitHand();
-        }
-        public bool pinchouDedos(Vector3 b1, Vector3 b2)
+        public override bool SupportsEditorPersistence() {
+      return true;
+    }
+
+    public override void InitHand() {
+      base.InitHand();
+    }
+        public bool pinchouDedos(Vector b1, Vector b2)
         {
             bool retorno = false;
-            Vector3 distancia = new Vector3(b1.x - b2.x, b1.y - b2.y, b1.z - b2.z);
-            if (distancia.x < 0.01 || distancia.y < 0.01)
+            float distancia = b1.DistanceTo(b2);
+            if (distancia<=.03f) //medida utilizada pelo prÃ³prio pinch detector do leap
             {
                 retorno = true;
             }
@@ -87,14 +83,15 @@ namespace Leap.Unity
             return resultado;
         }
 
-        public float angulo_dedos(Bone b1, Bone b2)
+       /* public float angulo_dedos(Finger f1, Finger f2)
         {
-            Vector3 direcao1 = new Vector3(b1.NextJoint.x - b1.PrevJoint.x, b1.NextJoint.y - b1.PrevJoint.y, b1.NextJoint.z - b1.PrevJoint.z);
-            Vector3 direcao2 = new Vector3(b2.NextJoint.x - b2.PrevJoint.x, b2.NextJoint.y - b2.PrevJoint.y, b2.NextJoint.z - b2.PrevJoint.z);
+            Vector3 proximal1 = f1.Bone(Bone.BoneType.TYPE_PROXIMAL).Direction;//ajeitar isso mais tarde!!!!
+            Vector3 direcao1 = new Vector3(f1.TipPosition.x - proximal1.x, f1.TipPosition.y - proximal1.y, f1.TipPosition.z - proximal1.z);
+            Vector3 direcao2 = new Vector3(f2.TipPosition.x - b2.PrevJoint.x, f2.TipPosition.y - b2.PrevJoint.y, f2.TipPosition.z - b2.PrevJoint.z);
             return Mathf.Acos((produto_escalar(direcao1, direcao2)) / (modulo_vetor(direcao1) * modulo_vetor(direcao2)));
-        }
+        }*/
 
-        public float modulo_vetor(Vector3 vet)
+        public float modulo_vetor(Vector vet)
         {
             return Mathf.Sqrt(Mathf.Pow(vet.x, 2) + Mathf.Pow(vet.y, 2) + Mathf.Pow(vet.z, 2));
         }
@@ -104,10 +101,9 @@ namespace Leap.Unity
             return angle * (180.0 / Mathf.PI);
         }
 
-        public override void UpdateHand()
-        {
-            //Finger f1, f2;
-            FingerModel f1 = null, f2 = null, f3 = null, f4 = null, f5 = null;
+        public override void UpdateHand() {
+
+            FingerModel f1=null, f2 = null, f3 = null, f4 = null, f5 = null;
             //float angulo= 0.0f;
             for (int f = 0; f < fingers.Length; ++f)
             {
@@ -120,359 +116,358 @@ namespace Leap.Unity
                     if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_INDEX)
                         f2 = fingers[f];
                     if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_THUMB)
-                        f1 = fingers[f];
+                        f1 = fingers[f]; 
                     if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_RING)
                         f4 = fingers[f];
                     if (fingers[f].GetLeapFinger().Type == Finger.FingerType.TYPE_PINKY)
                         f5 = fingers[f];
+                }
+            }
                     //   Debug.Log("Angulo: " + produto_escalar();
-                }
-            }
-            // if ((f1 != null) && (f2 != null))
-            //{
-            //  angulo = Mathf.Acos((produto_escalar(f1.GetBoneDirection(3), f2.GetBoneDirection(3))) / (modulo_vetor(f1.GetBoneDirection(3)) * modulo_vetor(f2.GetBoneDirection(3))));
+                    if (Input.GetKeyDown("m"))
+                    {
+                        comecarExercicio.passarMenu();
+                    }
 
-            //}
-            //Debug.Log("Angulo:"+RadianToDegree(angulo));
-
-            if (Input.GetKeyDown("m")) {
-                comecarExercicio.passarMenu();
-            }
-
-            if (concluido)
-            {
-                //bol = !bol;
-                //Debug.Log("bol:" + bol);
-                Debug.Log("Proximo exercicio");
-
-                exerciciosBolean[contadorNumeroDeExercicios] = false;
-                contadorNumeroDeExercicios++;
-                contadorAbducao = 0;
-                Debug.Log("oi " + contadorNumeroDeExercicios);
-                contadorLevant = 0;
-                auxiliarPinch = false;
-                conta_text_Pinch.text = "0";
-                exercicioConcluido.enabled = false;
-                concluido = false;
-                if (contadorNumeroDeExercicios < exerciciosBolean.Length)
-                {
-
-                    exerciciosBolean[contadorNumeroDeExercicios] = true;
-                    concluido = false;
-                }
-                else
-                {
-                    conta_text_Abducao.enabled = false;
-                    exercicioConcluido.enabled = true;
-                    exercicioConcluido.text = "TODOS OS EXERCICIOS CONCLUIDOS! Aperte M para ir ao menu!";
-                    nome_exercicio.text = "";
-                    Debug.Log("Parabens");
-                }
-
-            }
-            if (f2 != null)//se um dedo é visível, os outros provavelmente estão visíveis - nosso setup fará com que todos estejam visíveis
-            { //contar abdução dos dedos médio e indicador até 10
-                //texto está dando null pointer exception!!!
-                if (exerciciosBolean[0]) //AbdInd
-                {
-                        conta_text_Abducao.text = contadorAbducao.ToString();
-                        info_exercicio.enabled = true;
-                        if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < qtdAbdInd &&
-                            aux_texto_abd)
+                    if (concluido)
+                    {
+                        
+                        if (contadorNumeroDeExercicios < exerciciosBolean.Length)//trocar essa lÃ³gica pois nem todos os exercÃ­cios vÃ£o ser necessariamente executados
                         {
-                            contadorAbducao++;
+                            Debug.Log("Proximo exercicio");
+
+                            exerciciosBolean[contadorNumeroDeExercicios] = false;
+                            contadorNumeroDeExercicios++;
+                            contadorAbducao = 0;
+                            contadorLevant = 0;
+                            auxiliarPinch = false;
+                            conta_text_Pinch.text = "0";
                             exercicioConcluido.enabled = false;
-                            cuboProximoExercicio.SetActive(false);
-                            proximoExercicio.enabled = false;
-                            aux_texto_abd = false;
-                            Debug.Log(RadianToDegree(angulo_dedos(f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL), f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL))));
-
-                            //Debug.Log("Contador de abrir-fechar: " + contadorAbducao);
+                            exerciciosBolean[contadorNumeroDeExercicios] = true;
+                            concluido = false;
                         }
-                        if (Mathf.Abs(f2.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) < 0.02)
+                        else
                         {
-                            aux_texto_abd = true;
-                        }
-                        if (contadorAbducao == qtdAbdInd)
-                        {
-                            concluido = true;
+                            conta_text_Abducao.enabled = false;
                             exercicioConcluido.enabled = true;
-                            //cuboProximoExercicio.SetActive(true);
-                            //proximoExercicio.enabled = true;
-                            info_exercicio.enabled = false;
-                            // cuboProximoExercicio.SetActive(true); 
+                            exercicioConcluido.text = "TODOS OS EXERCICIOS CONCLUIDOS! Aperte M para ir ao menu!";
+                            nome_exercicio.text = "";
+                            Debug.Log("Parabens");
+                        }
+
+                    }
+                    if (f1!=null && f2 != null && f3!=null && f4!=null && f5!=null)//Ã© preciso checar se todos os dedos estÃ£o visÃ­veis para que nÃ£o dÃª problema de compilaÃ§Ã£o ou null inesperado
+                    { 
+                      
+                        if (exerciciosBolean[0]) //AbdInd
+                        {
+                            conta_text_Abducao.text = contadorAbducao.ToString();
+                            info_exercicio.enabled = true;
+                            
+                            double anguloIndicadorMedio = RadianToDegree((double)f2.GetLeapFinger().TipPosition.AngleTo(f3.GetLeapFinger().TipPosition));
+                            if (anguloIndicadorMedio > 4 && anguloIndicadorMedio <= 20 && contadorAbducao < qtdAbdInd &&
+                                aux_texto_abd)
+                            {
+                                contadorAbducao++;
+                                exercicioConcluido.enabled = false;
+                                cuboProximoExercicio.SetActive(false);
+                                proximoExercicio.enabled = false;
+                                aux_texto_abd = false;
+                                Debug.Log("Ã‚ngulo: " + anguloIndicadorMedio);
+                            }
+                            if (anguloIndicadorMedio<=3)
+                            {
+                                aux_texto_abd = true;
+                            }
+                            if (contadorAbducao == qtdAbdInd)
+                            {
+                                concluido = true;
+                                exercicioConcluido.enabled = true;
+                                //cuboProximoExercicio.SetActive(true);
+                                //proximoExercicio.enabled = true;
+                                info_exercicio.enabled = false;
+                                // cuboProximoExercicio.SetActive(true); 
+                                // proximoExercicio.enabled = true;
+                            }
+
+
+
+                        }
+                        else if (exerciciosBolean[1]) //AbdMedio
+                        {
                             // proximoExercicio.enabled = true;
+                            nome_exercicio.text = "Contador de aducao/abducao medio:";
+                            conta_text_Abducao.text = contadorAbducao.ToString();
+                            info_exercicio.enabled = true;
+
+                            double anguloIndicadorMedio = RadianToDegree((double)f2.GetLeapFinger().TipPosition.AngleTo(f3.GetLeapFinger().TipPosition));
+                            if (anguloIndicadorMedio > 4 && anguloIndicadorMedio <=20 && contadorAbducao < qtdAbdMed &&
+                                aux_texto_abd)
+                            {
+                                contadorAbducao++;
+                                exercicioConcluido.enabled = false;
+                                cuboProximoExercicio.SetActive(false);
+                                proximoExercicio.enabled = false;
+                                aux_texto_abd = false;
+                                Debug.Log("Ã‚ngulo mÃ©dio: "+anguloIndicadorMedio);
+
+                            }
+                            if (anguloIndicadorMedio <=3)
+                            {
+                                aux_texto_abd = true;
+                            }
+                            if (contadorAbducao == qtdAbdMed)
+                            {
+                                concluido = true;
+                                exercicioConcluido.enabled = true;
+                                info_exercicio.enabled = false;
+                            }
+
                         }
-                  
-                    
-
-                }
-                else if (exerciciosBolean[1]) //AbdMedio
-                {
-                        // proximoExercicio.enabled = true;
-                        nome_exercicio.text = "Contador de aducao/abducao medio:";
-                        conta_text_Abducao.text = contadorAbducao.ToString();
-                        info_exercicio.enabled = true;
-
-                        if (Mathf.Abs(f3.GetLeapFinger().TipPosition.x - f2.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < qtdAbdMed &&
-                            aux_texto_abd)
+                        else if (exerciciosBolean[2]) //abdAnl 
                         {
-                            contadorAbducao++;
+
+                            nome_exercicio.text = "Contador de aducao/abducao anelar:";
+                            conta_text_Abducao.text = contadorAbducao.ToString();
+                            info_exercicio.enabled = true;
+                            double anguloMedioAnelar = RadianToDegree((double)f3.GetLeapFinger().TipPosition.AngleTo(f4.GetLeapFinger().TipPosition));
+                            if (anguloMedioAnelar > 4 && anguloMedioAnelar <= 20 && contadorAbducao < qtdAbdAnl &&
+                                aux_texto_abd)
+                            {
+                                contadorAbducao++;
+                                exercicioConcluido.enabled = false;
+                                cuboProximoExercicio.SetActive(false);
+                                proximoExercicio.enabled = false;
+                                aux_texto_abd = false;
+                                Debug.Log("Ã‚ngulo anelar: " + anguloMedioAnelar);
+                    }
+                            if (anguloMedioAnelar<=3)
+                            {
+                                aux_texto_abd = true;
+                            }
+                            if (contadorAbducao == qtdAbdAnl)
+                            {
+                                concluido = true;
+                                exercicioConcluido.enabled = true;
+                                info_exercicio.enabled = false;
+                            }
+
+
+                        }
+                        else if (exerciciosBolean[3]) // abdMindi
+                        {
+                            nome_exercicio.text = "Contador de aducao/abducao mindinho:";
+                            conta_text_Abducao.text = contadorAbducao.ToString();
+                            info_exercicio.enabled = true;
+                            //double anguloMidiAnelar = RadianToDegree((double)f5.GetLeapFinger().TipPosition.AngleTo(f4.GetLeapFinger().TipPosition));
+                   // Debug.Log("Angulo pontas dos dedos: "+anguloMidiAnelar);
+                            Bone proximalAnelar = f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL);
+                            Bone proximalMindinho = f5.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL);
+                            double anguloMidiAnelar = RadianToDegree((double)proximalAnelar.NextJoint.AngleTo(proximalMindinho.NextJoint));
+                            Debug.Log("Angulo proximais: " + anguloMidiAnelar);
+
+                    if (anguloMidiAnelar > 3.5 && anguloMidiAnelar <=20 && contadorAbducao < qtdAbdMindi &&
+                                aux_texto_abd)
+                            {
+                                contadorAbducao++;
+                                exercicioConcluido.enabled = false;
+                                cuboProximoExercicio.SetActive(false);
+                                proximoExercicio.enabled = false;
+                                aux_texto_abd = false;
+                                //Debug.Log("Angulo proximais: " + anguloMidiAnelar);
+                    }
+                            if (anguloMidiAnelar <= 3.3)
+                            {
+                                aux_texto_abd = true;
+                            }
+                            if (contadorAbducao == qtdAbdMindi)
+                            {
+                                concluido = true;
+                                exercicioConcluido.enabled = true;
+                                info_exercicio.enabled = false;
+                            }
+                            //nÃ£o consigo fazer esse exercÃ­cio, mudar abordagem de pegar Ã¢ngulo de ossos proximais!!
+                        }
+                        else if (exerciciosBolean[4])//Levantamento
+                        {
+                            
+                            //exercï¿½cio de levantar o dedo indicador
+                            nome_exercicio.text = "Contador de levantamento: ";
+                            conta_text_Abducao.text = contadorLevant.ToString();
+                            info_exercicio.enabled = true;
+                            info_exercicio.texture = (Texture)Resources.Load("rv_instru_levant");
+                    // 
+                            Vector ponta = f2.GetLeapFinger().TipPosition;
+                            Vector juntaProximal = f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).PrevJoint;
+                            Vector distanciaPontaJunta = new Vector(ponta.x-juntaProximal.x,ponta.y- juntaProximal.y,ponta.z- juntaProximal.z);
+                            double anguloAlfa = RadianToDegree((double)distanciaPontaJunta.AngleTo(f2.GetLeapHand().PalmNormal));
+                           /// double anguloAlfa = RadianToDegree((double)f2.GetLeapFinger().TipPosition.AngleTo(f2.GetLeapHand().PalmPosition));
+                            anguloAlfa = anguloAlfa - 90; //precisa diminuir pois o Ã¢ngulo Ã© mais amplo
+                            Debug.Log(anguloAlfa);
+                            if (anguloAlfa > 4 && anguloAlfa <=30 && aux_texto_levant && contadorLevant < qtdLevantamento)
+                            {
+
+                                aux_texto_levant = false;
+                                contadorLevant++;
+                                exercicioConcluido.enabled = false;
+                                cuboProximoExercicio.SetActive(false);
+                                proximoExercicio.enabled = false;
+
+                            }
+                            if (anguloAlfa <= 3)
+                            {
+                                aux_texto_levant = true;
+                            }
+                            if (contadorLevant == qtdLevantamento)
+                            {
+                                concluido = true;
+                                exercicioConcluido.enabled = true;
+                                info_exercicio.enabled = false;
+                            }
+
+                        }
+                        else if (exerciciosBolean[5]) //pinchInd
+                        {
+
+                            nome_exercicio.text = "Contador de PinÃ§a (Indicador): ";
+                            info_exercicio.enabled = true;
+                            info_exercicio.texture = (Texture)Resources.Load("rv_instru_pinca");
+                            conta_text_Abducao.text = contadorPinchInd.ToString();
                             exercicioConcluido.enabled = false;
+                            if ((contadorPinchInd < qtdPinchInd))//indicador - usa o PinchDetector do LeapMotion, que jÃ¡ Ã© calibrado para ele 
+                            {
+                                contadorPinch = int.Parse(conta_text_Pinch.text);
+                                Debug.Log("conta_text_Pinch" + conta_text_Pinch.text);
+                                contadorPinchInd = int.Parse(conta_text_Pinch.text);
+                                Debug.Log("contadorPinchInd" + contadorPinchInd.ToString());
+                                auxiliarPinch = false;
+                                conta_text_Abducao.text = conta_text_Pinch.text;
+                            }
+
+                            if ((contadorPinchInd == qtdPinchInd))
+                            {
+                                concluido = true;
+                                exercicioConcluido.enabled = true;
+                                info_exercicio.enabled = false;
+                            }
+
+                        }
+                        else if (exerciciosBolean[6])//pinchMed
+                        {
+
+                            nome_exercicio.text = "Contador de PinÃ§a (MÃ©dio): ";
+                            exercicioConcluido.enabled = false;
+                            //dedo mÃ©dio
+                            if (contadorPinchMed < qtdPinchMed && pinchouDedos(f3.GetLeapFinger().TipPosition, f1.GetLeapFinger().TipPosition) && auxiliarPinch)
+                            {
+                                if ((qtdPinchMed - contadorPinchMed) == 1) { PinchBolean[1] = false; PinchBolean[2] = true; }
+
+                                contadorPinchMed++;
+                                Debug.Log("Pinchou mÃ©dio: " + contadorPinchMed.ToString());
+                                Debug.Log("conta_text_Pinch" + conta_text_Pinch.text);
+                                auxiliarPinch = false;
+                                conta_text_Abducao.text = contadorPinchMed.ToString();
+
+                            }
+                            else if (!pinchouDedos(f3.GetLeapFinger().TipPosition, f1.GetLeapFinger().TipPosition)) auxiliarPinch = true;
+
+                            if (contadorPinchMed == qtdPinchMed)
+                            {
+                                concluido = true;
+                                exercicioConcluido.enabled = true;
+                                info_exercicio.enabled = false;
+                            }
+
+                        }
+                        else if (exerciciosBolean[7])//pinchAnl
+                        {
+
+                            nome_exercicio.text = "Contador de PinÃ§a (Anelar): ";
+                            exercicioConcluido.enabled = false;
+                            if (contadorPinchAnl < qtdPinchAnl && pinchouDedos(f4.GetLeapFinger().TipPosition, f1.GetLeapFinger().TipPosition) && auxiliarPinch)
+                            {
+                                contadorPinchAnl++;
+                                Debug.Log("Pinchou anelar: " + contadorPinchAnl.ToString());
+                                auxiliarPinch = false;
+                                conta_text_Abducao.text = contadorPinchAnl.ToString();
+                            }
+                            else if (!pinchouDedos(f4.GetLeapFinger().TipPosition, f1.GetLeapFinger().TipPosition)) auxiliarPinch = true;
+
+                            if (contadorPinchAnl == qtdPinchAnl)
+                            {
+                                concluido = true;
+                                exercicioConcluido.enabled = true;
+                                info_exercicio.enabled = false;
+                            }
+
+                        }
+                        else if (exerciciosBolean[8])//pinchMindi
+                        {
+
+                            nome_exercicio.text = "Contador de PinÃ§a (Mindinho): ";
+                            //mindinho
+                            if (contadorPinchMindi < qtdPinchMindi && pinchouDedos(f5.GetLeapFinger().TipPosition, f1.GetLeapFinger().TipPosition) && auxiliarPinch)
+                            {
+                                contadorPinchMindi++;
+                                Debug.Log("Pinchou mindinho: " + contadorPinchMindi.ToString());
+                                auxiliarPinch = false;
+                                conta_text_Abducao.text = contadorPinchMindi.ToString();
+                                Debug.Log("Ind " + contadorPinchInd + " Med " + contadorPinchMed + " Anl " + contadorPinchAnl + " Mindi " + contadorPinchMindi);
+                            }
+                            else if (!pinchouDedos(f5.GetLeapFinger().TipPosition, f1.GetLeapFinger().TipPosition)) auxiliarPinch = true;
+
+
+
                             cuboProximoExercicio.SetActive(false);
                             proximoExercicio.enabled = false;
-                            aux_texto_abd = false;
-                            Debug.Log(RadianToDegree(angulo_dedos(f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL), f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL))));
-
-                        }
-                        if (Mathf.Abs(f3.GetLeapFinger().TipPosition.x - f2.GetLeapFinger().TipPosition.x) < 0.02)
-                        {
-                            aux_texto_abd = true;
-                        }
-                        if (contadorAbducao == qtdAbdMed)
-                        {
-                            concluido = true;
-                            exercicioConcluido.enabled = true;
-                            info_exercicio.enabled = false;
-                        }
-                    
-                }
-                else if (exerciciosBolean[2]) //abdAnl 
-                {
-                  
-                        nome_exercicio.text = "Contador de aducao/abducao anelar:";
-                        conta_text_Abducao.text = contadorAbducao.ToString();
-                        info_exercicio.enabled = true;
-                        if (Mathf.Abs(f4.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < qtdAbdAnl &&
-                            aux_texto_abd)
-                        {
-                            contadorAbducao++;
-                            exercicioConcluido.enabled = false;
-                            cuboProximoExercicio.SetActive(false);
-                            proximoExercicio.enabled = false;
-                            aux_texto_abd = false;
-                            Debug.Log(RadianToDegree(angulo_dedos(f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL), f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL))));
-                        }
-                        if (Mathf.Abs(f4.GetLeapFinger().TipPosition.x - f3.GetLeapFinger().TipPosition.x) < 0.02)
-                        {
-                            aux_texto_abd = true;
-                        }
-                        if (contadorAbducao == qtdAbdAnl)
-                        {
-                            concluido = true;
-                            exercicioConcluido.enabled = true;
-                            info_exercicio.enabled = false;
-                        }
-
-                    
-                }
-                else if (exerciciosBolean[3]) // abdMindi
-                {
-                        nome_exercicio.text = "Contador de aducao/abducao mindinho:";
-                        conta_text_Abducao.text = contadorAbducao.ToString();
-                        info_exercicio.enabled = true;
-                        if (Mathf.Abs(f5.GetLeapFinger().TipPosition.x - f4.GetLeapFinger().TipPosition.x) > 0.02 && contadorAbducao < qtdAbdMindi &&
-                            aux_texto_abd)
-                        {
-                            contadorAbducao++;
-                            exercicioConcluido.enabled = false;
-                            cuboProximoExercicio.SetActive(false);
-                            proximoExercicio.enabled = false;
-                            aux_texto_abd = false;
-                            Debug.Log(RadianToDegree(angulo_dedos(f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL), f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_DISTAL))));
-                        }
-                        if (Mathf.Abs(f5.GetLeapFinger().TipPosition.x - f4.GetLeapFinger().TipPosition.x) < 0.02)
-                        {
-                            aux_texto_abd = true;
-                        }
-                        if (contadorAbducao == qtdAbdMindi)
-                        {
-                            concluido = true;
-                            exercicioConcluido.enabled = true;
-                            info_exercicio.enabled = false;
-                        }
-                    
-                }
-                else if (exerciciosBolean[4])//Levantamento
-                {
-                   
-                        //exercício de levantar o dedo indicador
-                        nome_exercicio.text = "Contador de levantamento: ";
-                        conta_text_Abducao.text = contadorLevant.ToString();
-                        info_exercicio.enabled = true;
-                        info_exercicio.texture = (Texture)Resources.Load("rv_instru_levant");
-
-                        if (f2.GetBoneDirection((int)Bone.BoneType.TYPE_DISTAL).y > 0.04 && aux_texto_levant && contadorLevant < qtdLevantamento)
-                        {
-
-                            aux_texto_levant = false;
-                            contadorLevant++;
-                            exercicioConcluido.enabled = false;
-                            cuboProximoExercicio.SetActive(false);
-                            proximoExercicio.enabled = false;
-
-                        }
-                        if (f2.GetBoneDirection((int)Bone.BoneType.TYPE_DISTAL).y < 0.02)
-                        {
-                            aux_texto_levant = true;
-                        }
-                        if (contadorLevant == qtdLevantamento)
-                        {
-                            concluido = true;
-                            exercicioConcluido.enabled = true;
-                            info_exercicio.enabled = false;
-                        }
-                    
-                }
-                else if (exerciciosBolean[5]) //pinchInd
-                {
-                    
-                        nome_exercicio.text = "Contador de Pinch Indicador: ";
-                        info_exercicio.enabled = true;
-                        info_exercicio.texture = (Texture)Resources.Load("rv_instru_pinca");
-                        conta_text_Abducao.text = contadorPinchInd.ToString();
-                        exercicioConcluido.enabled = false;
-                        if ((contadorPinchInd < qtdPinchInd))//indicador - usa o PinchDetector do LeapMotion, que já é calibrado para ele 
-                        {
-                            contadorPinch = int.Parse(conta_text_Pinch.text);
-                            Debug.Log("conta_text_Pinch" + conta_text_Pinch.text);
-                            contadorPinchInd = int.Parse(conta_text_Pinch.text);
-                            Debug.Log("contadorPinchInd" + contadorPinchInd.ToString());
-                            auxiliarPinch = false;
-                            conta_text_Abducao.text = conta_text_Pinch.text;
-                        }
-
-                        if ((contadorPinchInd == qtdPinchInd))
-                        {
-                            concluido = true;
-                            exercicioConcluido.enabled = true;
-                            info_exercicio.enabled = false;
-                        }
-                    
-                }
-                else if (exerciciosBolean[6])//pinchMed
-                {
-                   
-                        nome_exercicio.text = "Contador de Pinch Medio: ";
-                        exercicioConcluido.enabled = false;
-                        //dedo médio
-                        if (contadorPinchMed < qtdPinchMed && pinchouDedos(f3.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL)) && auxiliarPinch)
-                        {
-                            if ((qtdPinchMed - contadorPinchMed) == 1) { PinchBolean[1] = false; PinchBolean[2] = true; }
-
-                            contadorPinchMed++;
-                            Debug.Log("Pinchou médio: " + contadorPinchMed.ToString());
-                            Debug.Log("conta_text_Pinch" + conta_text_Pinch.text);
-                            auxiliarPinch = false;
-                            conta_text_Abducao.text = contadorPinchMed.ToString();
-
-                        }
-                        else if (!pinchouDedos(f3.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL))) auxiliarPinch = true;
-
-                        if (contadorPinchMed == qtdPinchMed)
-                        {
-                            concluido = true;
-                            exercicioConcluido.enabled = true;
-                            info_exercicio.enabled = false;
-                        }
-                    
-                }
-                else if (exerciciosBolean[7])//pinchAnl
-                {
-                   
-                        nome_exercicio.text = "Contador de Pinch Anelar: ";
-                        exercicioConcluido.enabled = false;
-                        if (contadorPinchAnl < qtdPinchAnl && pinchouDedos(f4.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL)) && auxiliarPinch)
-                        {
-                            contadorPinchAnl++;
-                            Debug.Log("Pinchou anelar: " + contadorPinchAnl.ToString());
-                            auxiliarPinch = false;
-                            conta_text_Abducao.text = contadorPinchAnl.ToString();
-                        }
-                        else if (!pinchouDedos(f3.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL))) auxiliarPinch = true;
-
-                        if (contadorPinchAnl == qtdPinchAnl)
-                        {
-                            concluido = true;
-                            exercicioConcluido.enabled = true;
-                            info_exercicio.enabled = false;
-                        }
-                    
-                }
-                else if (exerciciosBolean[8])//pinchMindi
-                {
-                   
-                        nome_exercicio.text = "Contador de Pinch Mindinho: ";
-                        //mindinho
-                        if (contadorPinchMindi < qtdPinchMindi && pinchouDedos(f5.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL)) && auxiliarPinch)
-                        {
-                            contadorPinchMindi++;
-                            Debug.Log("Pinchou mindinho: " + contadorPinchMindi.ToString());
-                            auxiliarPinch = false;
-                            conta_text_Abducao.text = contadorPinchMindi.ToString();
-                            Debug.Log("Ind " + contadorPinchInd + " Med " + contadorPinchMed + " Anl " + contadorPinchAnl + " Mindi " + contadorPinchMindi);
-                        }
-                        else if (!pinchouDedos(f3.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL), f1.GetBoneCenter((int)Bone.BoneType.TYPE_DISTAL))) auxiliarPinch = true;
 
 
+                            if (contadorPinchMindi == qtdPinchMindi)
+                            {
+                                concluido = true;
+                                exercicioConcluido.enabled = true;
+                                info_exercicio.enabled = false;
+                            }
 
-                        cuboProximoExercicio.SetActive(false);
-                        proximoExercicio.enabled = false;
-
-
-                        if (contadorPinchMindi == qtdPinchMindi)
-                        {
-                            concluido = true;
-                            exercicioConcluido.enabled = true;
-                            info_exercicio.enabled = false;
                         }
-                    
-                }
-
             }
+                
+            
 
-            if (palm != null)
-            {
-                Rigidbody palmBody = palm.GetComponent<Rigidbody>();
-                if (palmBody)
-                {
-                    palmBody.MovePosition(GetPalmCenter());
-                    palmBody.MoveRotation(GetPalmRotation());
-                }
-                else
-                {
-                    palm.position = GetPalmCenter();
-                    palm.rotation = GetPalmRotation();
-                }
-            }
 
-            if (forearm != null)
-            {
-                // Set arm dimensions.
-                CapsuleCollider capsule = forearm.GetComponent<CapsuleCollider>();
-                if (capsule != null)
-                {
-                    // Initialization
-                    capsule.direction = 2;
-                    forearm.localScale = new Vector3(1f / transform.lossyScale.x, 1f / transform.lossyScale.y, 1f / transform.lossyScale.z);
-
-                    // Update
-                    capsule.radius = GetArmWidth() / 2f;
-                    capsule.height = GetArmLength() + GetArmWidth();
-                }
-
-                Rigidbody forearmBody = forearm.GetComponent<Rigidbody>();
-                if (forearmBody)
-                {
-                    forearmBody.MovePosition(GetArmCenter());
-                    forearmBody.MoveRotation(GetArmRotation());
-                }
-                else
-                {
-                    forearm.position = GetArmCenter();
-                    forearm.rotation = GetArmRotation();
-                }
-            }
+      if (palm != null) {
+        Rigidbody palmBody = palm.GetComponent<Rigidbody>();
+        if (palmBody) {
+          palmBody.MovePosition(GetPalmCenter());
+          palmBody.MoveRotation(GetPalmRotation());
+        } else {
+          palm.position = GetPalmCenter();
+          palm.rotation = GetPalmRotation();
         }
+      }
+
+      if (forearm != null) {
+        // Set arm dimensions.
+        CapsuleCollider capsule = forearm.GetComponent<CapsuleCollider>();
+        if (capsule != null) {
+          // Initialization
+          capsule.direction = 2;
+          forearm.localScale = new Vector3(1f / transform.lossyScale.x, 1f / transform.lossyScale.y, 1f / transform.lossyScale.z);
+
+          // Update
+          capsule.radius = GetArmWidth() / 2f;
+          capsule.height = GetArmLength() + GetArmWidth();
+        }
+
+        Rigidbody forearmBody = forearm.GetComponent<Rigidbody>();
+        if (forearmBody) {
+          forearmBody.MovePosition(GetArmCenter());
+          forearmBody.MoveRotation(GetArmRotation());
+        } else {
+          forearm.position = GetArmCenter();
+          forearm.rotation = GetArmRotation();
+        }
+      }
     }
+  }
 }
