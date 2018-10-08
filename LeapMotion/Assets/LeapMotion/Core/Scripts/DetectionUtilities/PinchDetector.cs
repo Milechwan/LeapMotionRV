@@ -93,10 +93,10 @@ namespace Leap.Unity {
         }
       } else {
         if (_distance < ActivateDistance) {
-            if (contadorPinch.text.Equals("0")) temp = 0;
+            //if (contadorPinch.text.Equals("0")) temp = 0;
             texto.enabled = true;
             temp = temp + 1;
-            Debug.Log("contPinch" + temp);
+            Debug.Log("contPinch " + temp);
             contadorPinch.text = temp.ToString();
             changeState(true);
         }
