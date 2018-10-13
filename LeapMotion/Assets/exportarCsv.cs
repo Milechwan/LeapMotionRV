@@ -9,12 +9,7 @@ public class exportarCsv : MonoBehaviour {
     public static List<string[]> dadosLinha = new List<string[]>();//deixar público para que linhas com informações sejam adicionadas a partir do UpdateHand
     // Use this for initialization
     void Start () {
-        //nomes das colunas
-        string[] primeiraLinhaInfo = new string[3];
-        primeiraLinhaInfo[0] = "Exercício";
-        primeiraLinhaInfo[1] = "Dedo";
-        primeiraLinhaInfo[2] = "Ângulos obtidos";
-        dadosLinha.Add(primeiraLinhaInfo);
+        
     }
 	
 	// Update is called once per frame
@@ -49,7 +44,7 @@ public class exportarCsv : MonoBehaviour {
     {
         //depois passar no nome do arquivo sexo, idade e mão utilizada para exercícios
         //string dataHora = string.Format("{HH-mm-ss}",DateTime.Now);
-        string dataHora = DateTime.Now.ToString("HH-mm-ddMMyyyy");
+        string dataHora = DateTime.Now.ToString("HH-mm-ss-ddMMyyyy");
 
         #if UNITY_EDITOR
                         return Application.dataPath +"/CSV/"+dataHora+".csv";

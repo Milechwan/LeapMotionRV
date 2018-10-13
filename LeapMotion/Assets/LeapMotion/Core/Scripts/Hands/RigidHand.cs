@@ -56,6 +56,7 @@ namespace Leap.Unity {
         public static bool aux_texto_abd = true;
         public static bool aux_texto_levant = true;//esse � pra levantar dedo
         public static bool auxiliarPinch = true;
+        public static bool escreveuArquivo = false;
         public static int contadorPinchInd = 0;
         public static int contadorPinchMed = 0;
         public static int contadorPinchAnl = 0;
@@ -71,8 +72,14 @@ namespace Leap.Unity {
 
     public override void InitHand() {
       base.InitHand();
+        //nomes das colunas
+        string[] primeiraLinhaInfo = new string[3];
+        primeiraLinhaInfo[0] = "Exercício";
+        primeiraLinhaInfo[1] = "Dedo";
+        primeiraLinhaInfo[2] = "Ângulos obtidos";
+        inputCsv.Add(primeiraLinhaInfo);
             //definir as linhas que terão no arquivo de acordo com os exercícios a serem feitos
-      
+
       if (qtdAbdInd > 0)
       {
         string[] linhaAbdInd = new string[3];
@@ -244,9 +251,13 @@ namespace Leap.Unity {
                     exercicioConcluido.enabled = true;
                     exercicioConcluido.text = "TODOS OS EXERCICIOS CONCLUIDOS! Aperte M para ir ao menu!";
                     nome_exercicio.text = "";
-                    exportarCsv.dadosLinha = inputCsv;
-                    exportarCsv.escreverArquivo();
-                    Debug.Log("Parabens");
+                    if (escreveuArquivo == false)//para evitar que seja escrito várias vezes quando passar no else
+                    {
+                        exportarCsv.dadosLinha = inputCsv;
+                        exportarCsv.escreverArquivo();
+                        escreveuArquivo = true;
+                    }
+                    //Debug.Log("Parabens");
                 }
 
             }
@@ -290,8 +301,17 @@ namespace Leap.Unity {
                             //conta_text_Abducao.text = contadorAbducao.ToString();
                             info_exercicio.enabled = true;
                             nome_exercicio.text = "Contador de adução/abdução do indicador: " + contadorAbducao.ToString();
-                            double anguloIndicadorMedio = RadianToDegree((double)f2.GetLeapFinger().TipPosition.AngleTo(f3.GetLeapFinger().TipPosition));
-                            if (anguloIndicadorMedio > 4 && anguloIndicadorMedio <= 20 && contadorAbducao < qtdAbdInd &&
+                            Vector metacarpo = f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).PrevJoint;
+                            Vector pontaDedoInd = f2.GetLeapFinger().TipPosition;
+                            Vector pontaDedoMed = f3.GetLeapFinger().TipPosition;
+                            Vector diferencaPontaIndMetacarpo = new Vector(pontaDedoInd.x - metacarpo.x, pontaDedoInd.y - metacarpo.y, pontaDedoInd.z - metacarpo.z);
+                            Vector diferencaPontaMedMetacarpo = new Vector(pontaDedoMed.x-metacarpo.x,pontaDedoMed.y-metacarpo.y,pontaDedoMed.z-metacarpo.z);
+                            double anguloMetacMed = RadianToDegree(diferencaPontaIndMetacarpo.Normalized.AngleTo(diferencaPontaMedMetacarpo.Normalized));
+                            //double anguloMetacarpo = RadianToDegree(diferencaPontaMetacarpo.AngleTo(f2.GetLeapHand().StabilizedPalmPosition));
+                            double anguloIndicadorMedio = RadianToDegree((double)f2.GetLeapFinger().TipPosition.Normalized.AngleTo(f3.GetLeapFinger().TipPosition.Normalized));
+                            
+                           
+                            if (anguloMetacMed >=7 && anguloMetacMed <= 20 && contadorAbducao < qtdAbdInd &&
                                 aux_texto_abd)
                             {
                                 contadorAbducao++;
@@ -299,11 +319,15 @@ namespace Leap.Unity {
                                 cuboProximoExercicio.SetActive(false);
                                 proximoExercicio.enabled = false;
                                 aux_texto_abd = false;
-                                Debug.Log("Ângulo: " + anguloIndicadorMedio);
+                                Debug.Log("Ângulo usando osso metacarpo: " + anguloMetacMed);
+                               // Debug.Log("Ângulo: " + anguloIndicadorMedio);
                                 infoAngulos += anguloIndicadorMedio.ToString()+";";
+               
                             }
-                            if (anguloIndicadorMedio<=3)
+                            if (anguloMetacMed < 7)
                             {
+                                //Debug.Log("Ângulo para fechar: " + anguloIndicadorMedio);
+                                //Debug.Log("Ângulo usando osso metacarpo pra fechar: " + anguloMetacMed);
                                 aux_texto_abd = true;
                             }
                             if (contadorAbducao == qtdAbdInd)
