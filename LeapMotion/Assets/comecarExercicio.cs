@@ -37,7 +37,9 @@ public class comecarExercicio : MonoBehaviour {
     }
 
     public static void passarMenu() {
-        SceneManager.LoadScene("cena_menu");//?
+        //SceneManager.LoadScene("cena_menu");
+        Debug.Log("apertei o M");
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("cena_menu"));
     }
     void exercicio()
     {

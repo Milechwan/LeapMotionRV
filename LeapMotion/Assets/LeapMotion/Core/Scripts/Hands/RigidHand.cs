@@ -9,8 +9,12 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Leap;
 using UnityEngine.UI;
+using System.Text;
+using System.IO;
+using System;
 
 namespace Leap.Unity {
   /** A physics model for our rigid hand made out of various Unity Collider. */
@@ -56,14 +60,100 @@ namespace Leap.Unity {
         public static int contadorPinchMed = 0;
         public static int contadorPinchAnl = 0;
         public static int contadorPinchMindi = 0;
-       
+        //array para guardar o índice da linha na tabela
+        public static int[] indiceLinha = { -1, -1, -1, -1, -1 };
+        public static string infoAngulos = "";
+        public static List<string[]> inputCsv = exportarCsv.dadosLinha;
 
         public override bool SupportsEditorPersistence() {
-      return true;
-    }
+            return true;
+        }
 
     public override void InitHand() {
       base.InitHand();
+            //definir as linhas que terão no arquivo de acordo com os exercícios a serem feitos
+      
+      if (qtdAbdInd > 0)
+      {
+        string[] linhaAbdInd = new string[3];
+        linhaAbdInd[0] = "Adução/Abdução";
+        linhaAbdInd[1] = "Indicador";
+
+        inputCsv.Add(linhaAbdInd);
+        indiceLinha[0] = inputCsv.Count - 1; 
+      }
+        if (qtdAbdMed > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Adução/Abdução";
+            linhaAbdInd[1] = "Médio";
+
+            inputCsv.Add(linhaAbdInd);
+            indiceLinha[1] = inputCsv.Count - 1;
+        }
+        if (qtdAbdAnl > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Adução/Abdução";
+            linhaAbdInd[1] = "Anelar";
+
+            inputCsv.Add(linhaAbdInd);
+            indiceLinha[2] = inputCsv.Count - 1;
+        }
+        if (qtdAbdMindi > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Adução/Abdução";
+            linhaAbdInd[1] = "Mindinho";
+
+            inputCsv.Add(linhaAbdInd);
+            indiceLinha[3] = inputCsv.Count - 1;
+        }
+        if (qtdLevantamento > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Extensão";
+            linhaAbdInd[1] = "Indicador";
+
+            inputCsv.Add(linhaAbdInd);
+            indiceLinha[4] = inputCsv.Count - 1;
+        }
+        /*if (qtdPinchInd > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Pinça";
+            linhaAbdInd[1] = "Indicador";
+
+            inputCsv.Add(linhaAbdInd);
+            indiceLinha[5] = inputCsv.Length - 1;
+        }
+        if (qtdPinchMed > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Pinça";
+            linhaAbdInd[1] = "Médio";
+
+            inputCsv.Add(linhaAbdInd);
+            indiceLinha[6] = inputCsv.Length - 1;
+        }
+        if (qtdPinchAnl > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Pinça";
+            linhaAbdInd[1] = "Anelar";
+
+            inputCsv.Add(linhaAbdInd);
+            indiceLinha[7] = inputCsv.Length - 1;
+        }
+        if (qtdPinchMindi > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Pinça";
+            linhaAbdInd[1] = "Mindinho";
+
+            inputCsv.Add(linhaAbdInd);
+            indiceLinha[8] = inputCsv.Length - 1;
+        }*/
     }
         public bool pinchouDedos(Vector b1, Vector b2)
         {
@@ -123,9 +213,10 @@ namespace Leap.Unity {
                         f5 = fingers[f];
                 }
             }
-                    //   Debug.Log("Angulo: " + produto_escalar();
-                    if (Input.GetKeyDown("m"))
+                    //  não tá funcionando essa bosta
+                    if (Input.GetKeyDown(KeyCode.M))
                     {
+                        Debug.Log("apertei essa demonia");
                         comecarExercicio.passarMenu();
                     }
                     //conta_text_Abducao.enabled = true;
@@ -153,6 +244,8 @@ namespace Leap.Unity {
                     exercicioConcluido.enabled = true;
                     exercicioConcluido.text = "TODOS OS EXERCICIOS CONCLUIDOS! Aperte M para ir ao menu!";
                     nome_exercicio.text = "";
+                    exportarCsv.dadosLinha = inputCsv;
+                    exportarCsv.escreverArquivo();
                     Debug.Log("Parabens");
                 }
 
@@ -207,6 +300,7 @@ namespace Leap.Unity {
                                 proximoExercicio.enabled = false;
                                 aux_texto_abd = false;
                                 Debug.Log("Ângulo: " + anguloIndicadorMedio);
+                                infoAngulos += anguloIndicadorMedio.ToString()+";";
                             }
                             if (anguloIndicadorMedio<=3)
                             {
@@ -219,8 +313,15 @@ namespace Leap.Unity {
                                 //cuboProximoExercicio.SetActive(true);
                                 //proximoExercicio.enabled = true;
                                 info_exercicio.enabled = false;
-                                // cuboProximoExercicio.SetActive(true); 
-                                // proximoExercicio.enabled = true;
+                        // cuboProximoExercicio.SetActive(true); 
+                        // proximoExercicio.enabled = true;
+                                if (qtdAbdInd > 0)
+                                {
+                                    string[] auxiliarAngulos = inputCsv[indiceLinha[0]];
+                                    auxiliarAngulos[2] = infoAngulos;
+                                    inputCsv[indiceLinha[0]] = auxiliarAngulos;
+                                }
+                                infoAngulos = "";
                             }
 
 
@@ -243,6 +344,7 @@ namespace Leap.Unity {
                                 proximoExercicio.enabled = false;
                                 aux_texto_abd = false;
                                 Debug.Log("Ângulo médio: "+anguloIndicadorMedio);
+                                infoAngulos += anguloIndicadorMedio.ToString() + ";";
 
                             }
                             if (anguloIndicadorMedio <=3)
@@ -254,6 +356,14 @@ namespace Leap.Unity {
                                 concluido = true;
                                 exercicioConcluido.enabled = true;
                                 info_exercicio.enabled = false;
+                                if (qtdAbdMed > 0)
+                                {
+                                    string[] auxiliarAngulos = inputCsv[indiceLinha[1]];
+                                    auxiliarAngulos[2] = infoAngulos;
+                                    inputCsv[indiceLinha[1]] = auxiliarAngulos;
+                                }
+                                
+                                infoAngulos = "";
                             }
 
                         }
@@ -273,7 +383,8 @@ namespace Leap.Unity {
                                 proximoExercicio.enabled = false;
                                 aux_texto_abd = false;
                                 Debug.Log("Ângulo anelar: " + anguloMedioAnelar);
-                    }
+                                infoAngulos += anguloMedioAnelar.ToString() + ";";
+                            }
                             if (anguloMedioAnelar<=3)
                             {
                                 aux_texto_abd = true;
@@ -283,6 +394,13 @@ namespace Leap.Unity {
                                 concluido = true;
                                 exercicioConcluido.enabled = true;
                                 info_exercicio.enabled = false;
+                                if (qtdAbdAnl > 0)
+                                {
+                                    string[] auxiliarAngulos = inputCsv[indiceLinha[2]];
+                                    auxiliarAngulos[2] = infoAngulos;
+                                    inputCsv[indiceLinha[2]] = auxiliarAngulos;
+                                }
+                                infoAngulos = "";
                             }
 
 
@@ -291,14 +409,14 @@ namespace Leap.Unity {
                         {
                             nome_exercicio.text = "Contador de aducao/abducao mindinho: "+ contadorAbducao.ToString();
                     //conta_text_Abducao.text = contadorAbducao.ToString();
-                    info_exercicio.enabled = true;
+                            info_exercicio.enabled = true;
                             //double anguloMidiAnelar = RadianToDegree((double)f5.GetLeapFinger().TipPosition.AngleTo(f4.GetLeapFinger().TipPosition));
                    // Debug.Log("Angulo pontas dos dedos: "+anguloMidiAnelar);
                             Bone proximalAnelar = f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL);
                             Bone proximalMindinho = f5.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL);
                             double anguloMidiAnelar = RadianToDegree((double)proximalAnelar.NextJoint.AngleTo(proximalMindinho.NextJoint));
                             Debug.Log("Angulo proximais: " + anguloMidiAnelar);
-
+                            
                             if (anguloMidiAnelar > 3.5 && anguloMidiAnelar <=20 && contadorAbducao < qtdAbdMindi &&
                                 aux_texto_abd)
                             {
@@ -307,6 +425,7 @@ namespace Leap.Unity {
                                 cuboProximoExercicio.SetActive(false);
                                 proximoExercicio.enabled = false;
                                 aux_texto_abd = false;
+                                infoAngulos += anguloMidiAnelar.ToString() + ";";
                                 //Debug.Log("Angulo proximais: " + anguloMidiAnelar);
                             }
                             if (anguloMidiAnelar <= 3.3)
@@ -318,6 +437,13 @@ namespace Leap.Unity {
                                 concluido = true;
                                 exercicioConcluido.enabled = true;
                                 info_exercicio.enabled = false;
+                                if (qtdAbdMindi > 0)
+                                {
+                                    string[] auxiliarAngulos = inputCsv[indiceLinha[3]];
+                                    auxiliarAngulos[2] = infoAngulos;
+                                    inputCsv[indiceLinha[3]] = auxiliarAngulos;
+                                }
+                                infoAngulos = "";
                             }
                             //não consigo fazer esse exercício, mudar abordagem de pegar ângulo de ossos proximais!!
                         }
@@ -325,7 +451,7 @@ namespace Leap.Unity {
                         {
                             
                             //exerc�cio de levantar o dedo indicador
-                            nome_exercicio.text = "Contador de levantamento: "+ contadorLevant.ToString();
+                            nome_exercicio.text = "Contador de extensão do indicador: "+ contadorLevant.ToString();
                     //conta_text_Abducao.text = contadorLevant.ToString();
                             info_exercicio.enabled = true;
                             info_exercicio.texture = (Texture)Resources.Load("rv_instru_levant");
@@ -345,7 +471,7 @@ namespace Leap.Unity {
                                 exercicioConcluido.enabled = false;
                                 cuboProximoExercicio.SetActive(false);
                                 proximoExercicio.enabled = false;
-
+                                infoAngulos += anguloAlfa.ToString() + ";";
                             }
                             if (anguloAlfa <= 3)
                             {
@@ -356,6 +482,12 @@ namespace Leap.Unity {
                                 concluido = true;
                                 exercicioConcluido.enabled = true;
                                 info_exercicio.enabled = false;
+                                if (qtdLevantamento > 0)
+                                {
+                                    string[] auxiliarAngulos = inputCsv[indiceLinha[4]];
+                                    auxiliarAngulos[2] = infoAngulos;
+                                    inputCsv[indiceLinha[4]] = auxiliarAngulos;
+                                }
                             }
 
                         }
@@ -382,6 +514,13 @@ namespace Leap.Unity {
                                 concluido = true;
                                 exercicioConcluido.enabled = true;
                                 info_exercicio.enabled = false;
+                                /*if(qtdPinchInd > 0)
+                                {
+                                    string[] auxiliarAngulos = inputCsv[indiceLinha[5]];
+                                    auxiliarAngulos[2] = infoAngulos;
+                                    inputCsv[indiceLinha[5]] = auxiliarAngulos;
+                                }
+                                infoAngulos = "";*/
                             }
 
                         }
