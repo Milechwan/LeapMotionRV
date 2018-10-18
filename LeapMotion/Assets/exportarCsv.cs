@@ -7,6 +7,7 @@ using System;
 
 public class exportarCsv : MonoBehaviour {
     public static List<string[]> dadosLinha = new List<string[]>();//deixar público para que linhas com informações sejam adicionadas a partir do UpdateHand
+    public static int[] indiceLinha = { -1, -1, -1, -1, -1, -1, -1, -1, -1};
     // Use this for initialization
     void Start () {
         
@@ -16,6 +17,103 @@ public class exportarCsv : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public static void inicializarLinhasArquivo()
+    {
+        //nomes das colunas
+        string[] primeiraLinhaInfo = new string[3];
+        primeiraLinhaInfo[0] = "Exercício";
+        primeiraLinhaInfo[1] = "Dedo";
+        primeiraLinhaInfo[2] = "Ângulos obtidos";
+        dadosLinha.Add(primeiraLinhaInfo);
+        //definir as linhas que terão no arquivo de acordo com os exercícios a serem feitos
+        int qtdAbducaoInd = int.Parse(comecarExercicio.passAbdAduInd == null ? "0" : comecarExercicio.passAbdAduInd);
+        int qtdAbdMed = int.Parse(comecarExercicio.passAbdAduMed == null ? "0" : comecarExercicio.passAbdAduMed);
+        int qtdAbdAnl = int.Parse(comecarExercicio.passAbdAduAnl == null ? "0" : comecarExercicio.passAbdAduAnl);
+        int qtdAbdMindi = int.Parse(comecarExercicio.passAbdAduMindi == null ? "0" : comecarExercicio.passAbdAduMindi);
+        int qtdLevantamento = int.Parse(comecarExercicio.passarLevantamento == null ? "0" : comecarExercicio.passarLevantamento);
+        if (qtdAbducaoInd > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Adução/Abdução";
+            linhaAbdInd[1] = "Indicador";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[0] = dadosLinha.Count - 1;
+        }
+        if (qtdAbdMed > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Adução/Abdução";
+            linhaAbdInd[1] = "Médio";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[1] = dadosLinha.Count - 1;
+        }
+        if (qtdAbdAnl > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Adução/Abdução";
+            linhaAbdInd[1] = "Anelar";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[2] = dadosLinha.Count - 1;
+        }
+        if (qtdAbdMindi > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Adução/Abdução";
+            linhaAbdInd[1] = "Mindinho";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[3] = dadosLinha.Count - 1;
+        }
+        if (qtdLevantamento > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Extensão";
+            linhaAbdInd[1] = "Indicador";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[4] = dadosLinha.Count - 1;
+        }
+        if (qtdPinchInd > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Pinça";
+            linhaAbdInd[1] = "Indicador";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[5] = dadosLinha.Length - 1;
+        }
+        if (qtdPinchMed > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Pinça";
+            linhaAbdInd[1] = "Médio";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[6] = dadosLinha.Length - 1;
+        }
+        if (qtdPinchAnl > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Pinça";
+            linhaAbdInd[1] = "Anelar";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[7] = dadosLinha.Length - 1;
+        }
+        if (qtdPinchMindi > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Pinça";
+            linhaAbdInd[1] = "Mindinho";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[8] = dadosLinha.Length - 1;
+        }
+    }
 
     public static void escreverArquivo()
     {

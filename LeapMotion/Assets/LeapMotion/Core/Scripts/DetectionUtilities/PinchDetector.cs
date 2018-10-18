@@ -46,6 +46,7 @@ namespace Leap.Unity {
 
     public Text texto;
     public Text contadorPinch;
+    public static string infoAngulos = "";
     public int temp = 0;
     protected virtual void OnValidate() {
       ActivateDistance = Mathf.Max(0, ActivateDistance);
@@ -93,10 +94,16 @@ namespace Leap.Unity {
         }
       } else {
         if (_distance < ActivateDistance) {
-            //if (contadorPinch.text.Equals("0")) temp = 0;
+            if (contadorPinch.text.Equals("0")) temp = 0;
             texto.enabled = true;
             temp = temp + 1;
-            Debug.Log("contPinch " + temp);
+            Vector juntaProximal1 = hand.Fingers[1].Bone(Bone.BoneType.TYPE_PROXIMAL).PrevJoint;
+            Vector juntaProximal2 = hand.Fingers[1].Bone(Bone.BoneType.TYPE_PROXIMAL).NextJoint;
+            Vector juntaIntermedial = hand.Fingers[1].Bone(Bone.BoneType.TYPE_INTERMEDIATE).NextJoint;
+            Vector v1 = new Vector(juntaProximal2.x-juntaProximal1.x,juntaProximal2.y-juntaProximal1.y,juntaProximal2.z-juntaProximal1.z);
+            Vector v2 = new Vector(juntaIntermedial.x-juntaProximal2.x,juntaIntermedial.y-juntaProximal2.y,juntaIntermedial.z-juntaProximal2.z);
+                    // Debug.Log("contPinch " + temp);
+            infoAngulos += ((double)v2.Normalized.AngleTo(v1.Normalized)*180.0/Mathf.PI)+";";
             contadorPinch.text = temp.ToString();
             changeState(true);
         }

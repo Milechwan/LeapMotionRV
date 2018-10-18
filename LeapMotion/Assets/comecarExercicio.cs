@@ -37,9 +37,9 @@ public class comecarExercicio : MonoBehaviour {
     }
 
     public static void passarMenu() {
-        //SceneManager.LoadScene("cena_menu");
-        Debug.Log("apertei o M");
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("cena_menu"));
+        SceneManager.LoadScene("cena_menu");
+       // Debug.Log("apertei o M");
+        //SceneManager.SetActiveScene(SceneManager.GetSceneByName("cena_menu"));
     }
     void exercicio()
     {
@@ -52,6 +52,7 @@ public class comecarExercicio : MonoBehaviour {
         passPinchMed = i7.text;
         passPinchAnl = i8.text;
         passPinchMindi = i9.text;
+        exportarCsv.inicializarLinhasArquivo();
         SceneManager.LoadScene("cena_exercicios");
     }
 }
