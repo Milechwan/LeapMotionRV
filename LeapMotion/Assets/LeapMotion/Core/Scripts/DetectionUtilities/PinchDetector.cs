@@ -104,6 +104,7 @@ namespace Leap.Unity {
             Vector v2 = new Vector(juntaIntermedial.x-juntaProximal2.x,juntaIntermedial.y-juntaProximal2.y,juntaIntermedial.z-juntaProximal2.z);
                     // Debug.Log("contPinch " + temp);
             infoAngulos += ((double)v2.Normalized.AngleTo(v1.Normalized)*180.0/Mathf.PI)+";";
+            //Debug.Log(infoAngulos);
             contadorPinch.text = temp.ToString();
             changeState(true);
         }

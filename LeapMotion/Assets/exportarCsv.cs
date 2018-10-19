@@ -32,6 +32,11 @@ public class exportarCsv : MonoBehaviour {
         int qtdAbdAnl = int.Parse(comecarExercicio.passAbdAduAnl == null ? "0" : comecarExercicio.passAbdAduAnl);
         int qtdAbdMindi = int.Parse(comecarExercicio.passAbdAduMindi == null ? "0" : comecarExercicio.passAbdAduMindi);
         int qtdLevantamento = int.Parse(comecarExercicio.passarLevantamento == null ? "0" : comecarExercicio.passarLevantamento);
+        int qtdPinchInd = int.Parse(comecarExercicio.passPinchInd == null ? "0" : comecarExercicio.passPinchInd);
+        int qtdPinchMed = int.Parse(comecarExercicio.passPinchMed == null ? "0" : comecarExercicio.passPinchMed);
+        int qtdPinchAnl = int.Parse(comecarExercicio.passPinchAnl == null ? "0" : comecarExercicio.passPinchAnl);
+        int qtdPinchMindi = int.Parse(comecarExercicio.passPinchMindi == null ? "0" : comecarExercicio.passPinchMindi);
+
         if (qtdAbducaoInd > 0)
         {
             string[] linhaAbdInd = new string[3];
@@ -84,7 +89,7 @@ public class exportarCsv : MonoBehaviour {
             linhaAbdInd[1] = "Indicador";
 
             dadosLinha.Add(linhaAbdInd);
-            indiceLinha[5] = dadosLinha.Length - 1;
+            indiceLinha[5] = dadosLinha.Count - 1;
         }
         if (qtdPinchMed > 0)
         {
@@ -93,7 +98,7 @@ public class exportarCsv : MonoBehaviour {
             linhaAbdInd[1] = "Médio";
 
             dadosLinha.Add(linhaAbdInd);
-            indiceLinha[6] = dadosLinha.Length - 1;
+            indiceLinha[6] = dadosLinha.Count - 1;
         }
         if (qtdPinchAnl > 0)
         {
@@ -102,7 +107,7 @@ public class exportarCsv : MonoBehaviour {
             linhaAbdInd[1] = "Anelar";
 
             dadosLinha.Add(linhaAbdInd);
-            indiceLinha[7] = dadosLinha.Length - 1;
+            indiceLinha[7] = dadosLinha.Count - 1;
         }
         if (qtdPinchMindi > 0)
         {
@@ -111,7 +116,7 @@ public class exportarCsv : MonoBehaviour {
             linhaAbdInd[1] = "Mindinho";
 
             dadosLinha.Add(linhaAbdInd);
-            indiceLinha[8] = dadosLinha.Length - 1;
+            indiceLinha[8] = dadosLinha.Count - 1;
         }
     }
 
