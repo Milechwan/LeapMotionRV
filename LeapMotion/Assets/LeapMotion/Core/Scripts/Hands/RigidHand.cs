@@ -393,7 +393,7 @@ namespace Leap.Unity {
                             double anguloMetacarpo = RadianToDegree(diferenca.Normalized.AngleTo(f5.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                             double anguloMetacarpo2 = RadianToDegree(diferenca.Normalized.AngleTo(f3.GetLeapHand().Direction.Normalized));
                             Debug.Log(anguloMidiAnelar);
-                            if (anguloMidiAnelar > 2.5 && anguloMidiAnelar <= 20 && contadorAbducao < qtdAbdMindi &&
+                            if (anguloMetacarpo > 3.5 && anguloMetacarpo <= 20 && contadorAbducao < qtdAbdMindi &&
                                 aux_texto_abd)
                             {
                                 contadorAbducao++;
@@ -405,7 +405,7 @@ namespace Leap.Unity {
                                 Debug.Log("Angulo metacarpo mindinho: " + anguloMetacarpo+"; metacarpo com direção da palma: "+anguloMetacarpo2);
 
                             }
-                            if (anguloMidiAnelar <= 2.2)
+                            if (anguloMetacarpo <= 3.4)
                             {
                                 aux_texto_abd = true;
                             }
