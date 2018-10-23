@@ -35,7 +35,8 @@ namespace Leap.Unity {
         public Text conta_text_Pinch;
         public GameObject cuboProximoExercicio;
         public static int contadorAbducao = 0;
-        public static int qtdAbducao = int.Parse(comecarExercicio.passAbdAduInd==null? "0" : comecarExercicio.passAbdAduInd);// vai tirar depois
+        // public static int qtdAbducao = int.Parse(comecarExercicio.passAbdAduInd==null? "0" : comecarExercicio.passAbdAduInd);// vai tirar depois
+        public static int anguloMinAbdInd = int.Parse(comecarExercicio.anguloAbdInd == null ? "4" : comecarExercicio.anguloAbdInd);//não começar em 0 para ter controle melhor
         public static int qtdAbdInd = int.Parse(comecarExercicio.passAbdAduInd==null? "0" : comecarExercicio.passAbdAduInd);
         public static int qtdAbdMed = int.Parse(comecarExercicio.passAbdAduMed==null ? "0" : comecarExercicio.passAbdAduMed);
         public static int qtdAbdAnl = int.Parse(comecarExercicio.passAbdAduAnl==null? "0" : comecarExercicio.passAbdAduAnl);
@@ -237,8 +238,10 @@ namespace Leap.Unity {
                             double anguloMetacMed = RadianToDegree(diferencaPontaIndMetacarpo.AngleTo(f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                             //double anguloMetacarpo = RadianToDegree(diferencaPontaMetacarpo.AngleTo(f2.GetLeapHand().StabilizedPalmPosition));
                             double anguloIndicadorMedio = RadianToDegree((double)f2.GetLeapFinger().TipPosition.AngleTo(f3.GetLeapFinger().TipPosition));
-                            //Debug.Log("Ângulo: " + anguloIndicadorMedio);
-                            if (anguloIndicadorMedio >= 3 && anguloIndicadorMedio <= 20 && contadorAbducao < qtdAbdInd &&
+                    //Debug.Log("Ângulo: " + anguloIndicadorMedio); anguloMinAbdInd
+                   /* if (anguloIndicadorMedio >= 3 && anguloIndicadorMedio <= 20 && contadorAbducao < qtdAbdInd &&
+                                aux_texto_abd)*/
+                            if(anguloMinAbdInd <= anguloMetacInd && anguloMetacInd<=20 && contadorAbducao < qtdAbdInd &&
                                 aux_texto_abd)
                             {
                                 contadorAbducao++;
@@ -252,7 +255,7 @@ namespace Leap.Unity {
                                infoAngulos += anguloMetacInd.ToString()+"(indicador)-"+anguloMetacMed.ToString()+"(médio);";
 
                             }
-                            if (anguloIndicadorMedio < 3)
+                            if (anguloMetacInd < anguloMinAbdInd)
                             {
                                 //Debug.Log("Ângulo para fechar: " + anguloIndicadorMedio);
                                 //Debug.Log("Ângulo usando osso metacarpo pra fechar: " + anguloMetacMed);
