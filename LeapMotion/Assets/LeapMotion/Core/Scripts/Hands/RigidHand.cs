@@ -40,12 +40,14 @@ namespace Leap.Unity {
         public static int anguloMinAbdMed = int.Parse(comecarExercicio.anguloAbdMed == null ? "4" : comecarExercicio.anguloAbdMed);
         public static int anguloMinAbdAnl = int.Parse(comecarExercicio.anguloAbdAnl == null ? "4" : comecarExercicio.anguloAbdAnl);
         public static int anguloMinAbdMind = int.Parse(comecarExercicio.anguloAbdMind == null ? "4" : comecarExercicio.anguloAbdMind);
+        public static int anguloMinExtensao = int.Parse(comecarExercicio.anguloLevantamento == null ? "10":comecarExercicio.anguloLevantamento);
         public static int qtdAbdInd = int.Parse(comecarExercicio.passAbdAduInd==null? "0" : comecarExercicio.passAbdAduInd);
         public static int qtdAbdMed = int.Parse(comecarExercicio.passAbdAduMed==null ? "0" : comecarExercicio.passAbdAduMed);
         public static int qtdAbdAnl = int.Parse(comecarExercicio.passAbdAduAnl==null? "0" : comecarExercicio.passAbdAduAnl);
         public static int qtdAbdMindi = int.Parse(comecarExercicio.passAbdAduMindi==null? "0" : comecarExercicio.passAbdAduMindi);
         public static int contadorLevant = 0;//esse � pra levantar dedo
         public static int qtdLevantamento = int.Parse(comecarExercicio.passarLevantamento==null? "0" : comecarExercicio.passarLevantamento);
+        public static int qtdExtensaoMedio = int.Parse(comecarExercicio.passarExtMed == null ? "0" : comecarExercicio.passarExtMed);
         public static int contadorNumeroDeExercicios = 0;
         public static int contadorPinch;
         public static int qtdPinch = int.Parse(comecarExercicio.passPinchInd==null? "0" : comecarExercicio.passPinchInd);// vai tirar depois
@@ -54,7 +56,7 @@ namespace Leap.Unity {
         public static int qtdPinchAnl = int.Parse(comecarExercicio.passPinchAnl==null? "0" : comecarExercicio.passPinchAnl);
         public static int qtdPinchMindi = int.Parse(comecarExercicio.passPinchMindi==null? "0" : comecarExercicio.passPinchMindi);
         //public static bool bol = false;
-        public static bool[] exerciciosBolean = { true, false, false, false, false, false, false, false, false };
+        public static bool[] exerciciosBolean = { true, false, false, false, false, false, false, false, false };//aumentar tamanho do array para dar conta de todos os outros 3 exercícios de extensão
         public static bool[] PinchBolean = { true, false, false, false };
         public static bool concluido = false;
         public static bool aux_texto_abd = true;
@@ -178,12 +180,12 @@ namespace Leap.Unity {
                     exercicioConcluido.text = "TODOS OS EXERCICIOS CONCLUIDOS! Aperte M para ir ao menu!";
                     nome_exercicio.text = "";
 
-                    /* if (escreveuArquivo == false)//para evitar que seja escrito várias vezes quando passar no else
+                     if (escreveuArquivo == false)//para evitar que seja escrito várias vezes quando passar no else
                      {
                          exportarCsv.dadosLinha = inputCsv;
                          exportarCsv.escreverArquivo();
                          escreveuArquivo = true;
-                     }*/
+                     }
                     //Debug.Log("Parabens");
                 }
 
@@ -340,7 +342,7 @@ namespace Leap.Unity {
                             nome_exercicio.text = "Contador de aducao/abducao anelar: "+ contadorAbducao.ToString();
                             //conta_text_Abducao.text = contadorAbducao.ToString();
                             info_exercicio.enabled = true;
-                            double anguloMedioAnelar = RadianToDegree((double)f3.GetLeapFinger().TipPosition.AngleTo(f4.GetLeapFinger().TipPosition));
+
                             Vector metacarpo = f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).NextJoint;
                             Vector pontaDedoAnl = f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).NextJoint;
                             Vector diferencaPontaMet = new Vector(pontaDedoAnl.x-metacarpo.x,pontaDedoAnl.y-metacarpo.y,pontaDedoAnl.z-metacarpo.z);
@@ -448,7 +450,7 @@ namespace Leap.Unity {
                            /// double anguloAlfa = RadianToDegree((double)f2.GetLeapFinger().TipPosition.AngleTo(f2.GetLeapHand().PalmPosition));
                             anguloAlfa = anguloAlfa - 90; //precisa diminuir pois o ângulo é mais amplo
                            
-                            if (anguloAlfa > 3 && anguloAlfa <=30 && aux_texto_levant && contadorLevant < qtdLevantamento)
+                            if (anguloAlfa >= anguloMinExtensao && anguloAlfa <=30 && aux_texto_levant && contadorLevant < qtdLevantamento)
                             {
 
                                 aux_texto_levant = false;
@@ -459,7 +461,7 @@ namespace Leap.Unity {
                                 infoAngulos += anguloAlfa.ToString() + ";";
                                 Debug.Log(anguloAlfa);
                             }
-                            if (anguloAlfa <= 3)
+                            if (anguloAlfa < anguloMinExtensao - 2)
                             {
                                 aux_texto_levant = true;
                             }
@@ -528,7 +530,7 @@ namespace Leap.Unity {
                                // Debug.Log("Pinchou médio: " + anguloProximal);
                                // Debug.Log("conta_text_Pinch" + conta_text_Pinch.text);
                                 auxiliarPinch = false;
-                                infoAngulos += anguloProximal.ToString() + ";";
+                                infoAngulos += anguloProximal.ToString("n2") + ";";
                         //   conta_text_Abducao.text = contadorPinchMed.ToString();
 
                     }
@@ -560,7 +562,7 @@ namespace Leap.Unity {
                                 double anguloProximal = RadianToDegree(anguloFlexaoProximalPinch(f4));
                                 //Debug.Log("Pinchou anelar: " + anguloProximal);
                                 auxiliarPinch = false;
-                                infoAngulos += anguloProximal.ToString() + ";";
+                                infoAngulos += anguloProximal.ToString("n2") + ";";
                                 //conta_text_Abducao.text = contadorPinchAnl.ToString();
                             }
                             else if (!pinchouDedos(f4.GetLeapFinger().TipPosition, f1.GetLeapFinger().TipPosition)) auxiliarPinch = true;
@@ -590,7 +592,7 @@ namespace Leap.Unity {
                                 contadorPinchMindi++;
                                 double anguloProximal = RadianToDegree(anguloFlexaoProximalPinch(f4));
                                 //Debug.Log("Pinchou mindinho: " + anguloProximal);
-                                infoAngulos += anguloProximal.ToString() + ";";
+                                infoAngulos += anguloProximal.ToString("n2") + ";";
                                 auxiliarPinch = false;
                                 //conta_text_Abducao.text = contadorPinchMindi.ToString();
                                // Debug.Log("Ind " + contadorPinchInd + " Med " + contadorPinchMed + " Anl " + contadorPinchAnl + " Mindi " + contadorPinchMindi);

@@ -44,7 +44,7 @@ namespace Leap.Unity {
     protected Vector3 _pinchPos;
     protected Quaternion _pinchRotation;
 
-    public Text texto;
+    //public Text texto;
     public Text contadorPinch;
     public static string infoAngulos = "";
     public int temp = 0;
@@ -75,7 +75,7 @@ namespace Leap.Unity {
       Hand hand = _handModel.GetLeapHand();
 
       if (hand == null || !_handModel.IsTracked) {
-        texto.enabled = false;
+       // texto.enabled = false;
         contadorPinch.enabled = false;
         changeState(false);
         return;
@@ -87,7 +87,7 @@ namespace Leap.Unity {
 
       if (IsActive) {
         if (_distance > DeactivateDistance) {
-            texto.enabled = false;
+           // texto.enabled = false;
             contadorPinch.enabled = false;
             changeState(false);
           //return;
@@ -95,7 +95,7 @@ namespace Leap.Unity {
       } else {
         if (_distance < ActivateDistance) {
             if (contadorPinch.text.Equals("0")) temp = 0;
-            texto.enabled = true;
+           // texto.enabled = true;
             temp = temp + 1;
             Vector juntaProximal1 = hand.Fingers[1].Bone(Bone.BoneType.TYPE_PROXIMAL).PrevJoint;
             Vector juntaProximal2 = hand.Fingers[1].Bone(Bone.BoneType.TYPE_PROXIMAL).NextJoint;
@@ -103,8 +103,9 @@ namespace Leap.Unity {
             Vector v1 = new Vector(juntaProximal2.x-juntaProximal1.x,juntaProximal2.y-juntaProximal1.y,juntaProximal2.z-juntaProximal1.z);
             Vector v2 = new Vector(juntaIntermedial.x-juntaProximal2.x,juntaIntermedial.y-juntaProximal2.y,juntaIntermedial.z-juntaProximal2.z);
                     // Debug.Log("contPinch " + temp);
-            infoAngulos += ((double)v2.Normalized.AngleTo(v1.Normalized)*180.0/Mathf.PI)+";";
-            //Debug.Log(infoAngulos);
+                    double ang = (double)(v2.Normalized.AngleTo(v1.Normalized) * 180.0 / Mathf.PI);
+            infoAngulos += ang.ToString("n2") +";";//somente por causa do pinch do dedo indicador
+           // Debug.Log(infoAngulos);
             contadorPinch.text = temp.ToString();
             changeState(true);
         }
