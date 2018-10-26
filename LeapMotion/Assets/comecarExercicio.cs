@@ -14,7 +14,7 @@ public class comecarExercicio : MonoBehaviour {
     public InputField parametroExtMed;//parametroExtAnl,parametroExtMindi
     //textos dos ângulos
     public static string anguloAbdInd, anguloAbdMed, anguloAbdAnl, anguloAbdMind, anguloLevantamento, anguloExtMed;
-    public InputField anguloAbdIndIF, anguloAbdMedIF, anguloAbdAnlIF, anguloAbdMinIF, anguloLevantIF;//, anguloExtensaoMedIF,
+    public InputField anguloAbdIndIF, anguloAbdMedIF, anguloAbdAnlIF, anguloAbdMinIF, anguloLevantIF, anguloExtensaoMedIF;
     //anguloExtensaoAnlIF, anguloExtensaoMindiIF
     
     // Use this for initialization
@@ -35,8 +35,8 @@ public class comecarExercicio : MonoBehaviour {
         anguloAbdAnlIF.text = "0";
         anguloLevantIF.text = "0";
         /*anguloExtensaoAnlIF.text = "0";
-        anguloExtensaoMindiIF.text = "0";
-        anguloExtensaoMedIF.text = "0";*/
+        anguloExtensaoMindiIF.text = "0";*/
+        anguloExtensaoMedIF.text = "0";
         Button btn = comecar.GetComponent<Button>();        
         btn.onClick.AddListener(exercicio);
 	}
@@ -76,7 +76,7 @@ public class comecarExercicio : MonoBehaviour {
         anguloAbdMed = anguloAbdMedIF.text;
         anguloAbdMind = anguloAbdMinIF.text;
         anguloLevantamento = anguloLevantIF.text;
-        //anguloExtMed = anguloExtensaoMedIF.text;
+        anguloExtMed = anguloExtensaoMedIF.text;
         exportarCsv.inicializarLinhasArquivo();
         SceneManager.LoadScene("cena_exercicios");
     }
