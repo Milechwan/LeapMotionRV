@@ -12,7 +12,7 @@ public class apertarBotaoMenu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //  não tá funcionando essa bosta
+        
         if (Input.GetKeyDown(KeyCode.M))
         {
             
