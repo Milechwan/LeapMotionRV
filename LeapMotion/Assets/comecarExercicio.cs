@@ -10,8 +10,10 @@ public class comecarExercicio : MonoBehaviour {
     public static string passAbdAduInd, passAbdAduMed, passAbdAduAnl, passAbdAduMindi;
     public static string passarLevantamento, passarExtMed, passarExtAnl, passarExtMindi;
     public static string passPinchInd, passPinchMed, passPinchAnl, passPinchMindi;
+    public static string generoPaciente, inputIdade;
     public InputField i1, i2, i3, i4, i5, i6, i7, i8, i9;
-    public InputField parametroExtMed;//parametroExtAnl,parametroExtMindi
+    public InputField parametroExtMed, idadePaciente;//parametroExtAnl,parametroExtMindi
+    public Dropdown dropGeneroPaciente;
     //textos dos ângulos
     public static string anguloAbdInd, anguloAbdMed, anguloAbdAnl, anguloAbdMind, anguloLevantamento, anguloExtMed;
     public InputField anguloAbdIndIF, anguloAbdMedIF, anguloAbdAnlIF, anguloAbdMinIF, anguloLevantIF, anguloExtensaoMedIF;
@@ -37,6 +39,7 @@ public class comecarExercicio : MonoBehaviour {
         /*anguloExtensaoAnlIF.text = "0";
         anguloExtensaoMindiIF.text = "0";*/
         anguloExtensaoMedIF.text = "0";
+        idadePaciente.text = "0";
         Button btn = comecar.GetComponent<Button>();        
         btn.onClick.AddListener(exercicio);
 	}
@@ -60,6 +63,11 @@ public class comecarExercicio : MonoBehaviour {
     }
     void exercicio()
     {
+        //informações do paciente para salvar o csv
+        inputIdade = idadePaciente.text;
+        int dropDownValue = dropGeneroPaciente.value;
+        generoPaciente = dropGeneroPaciente.options[dropDownValue].text;
+        //informações dos exercícios passados
         passAbdAduInd = i1.text;
         passAbdAduMed = i2.text;
         passAbdAduAnl = i3.text;

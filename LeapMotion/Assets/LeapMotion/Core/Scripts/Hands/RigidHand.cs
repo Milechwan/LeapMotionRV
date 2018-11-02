@@ -136,6 +136,17 @@ namespace Leap.Unity {
             return angle * (180.0 / Mathf.PI);
         }
 
+        private double anguloProjecao(Vector a, Vector b)
+        {
+            Vector unitario = vetorUnitario(b);
+            float a1 = produto_escalar(a, unitario);
+            Vector projecaoDist = new Vector(unitario.x * a1, unitario.y * a1, unitario.z * a1);
+            Vector a2 = new Vector(a.x - projecaoDist.x, a.y - projecaoDist.y, a.z - projecaoDist.z);
+            float modulosA2Dist = modulo_vetor(a2) / modulo_vetor(projecaoDist);
+            float tangente = Mathf.Tan(modulosA2Dist);
+            return RadianToDegree(Mathf.Atan(tangente));
+        }
+
         public override void UpdateHand() {
 
             FingerModel f1=null, f2 = null, f3 = null, f4 = null, f5 = null;
@@ -188,13 +199,12 @@ namespace Leap.Unity {
                     exercicioConcluido.text = "TODOS OS EXERCICIOS CONCLUIDOS! Aperte M para ir ao menu!";
                     nome_exercicio.text = "";
 
-                   /*  if (escreveuArquivo == false)//para evitar que seja escrito várias vezes quando passar no else
+                     if (escreveuArquivo == false)//para evitar que seja escrito várias vezes quando passar no else
                      {
                          exportarCsv.dadosLinha = inputCsv;
                          exportarCsv.escreverArquivo();
                          escreveuArquivo = true;
-                     }*/
-
+                     }
                     //Debug.Log("Parabens");
                 }
 
@@ -244,13 +254,15 @@ namespace Leap.Unity {
                     Vector pontaDedoMed = f3.GetLeapFinger().TipPosition;
                     Vector diferencaPontaIndMetacarpo = new Vector(pontaDedoInd.x - metacarpo.x, pontaDedoInd.y - metacarpo.y, pontaDedoInd.z - metacarpo.z);
                     Vector diferencaPontaMedMetacarpo = new Vector(pontaDedoMed.x - metacarpo.x, pontaDedoMed.y - metacarpo.y, pontaDedoMed.z - metacarpo.z);
-                    diferencaPontaIndMetacarpo.x *= (-1);
+
+                    if (f2.GetLeapHand().IsRight) diferencaPontaIndMetacarpo.x *= (-1);
+
                     double anguloMetacInd = RadianToDegree(diferencaPontaIndMetacarpo.AngleTo(f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                     double anguloMetacMed = RadianToDegree(diferencaPontaIndMetacarpo.AngleTo(f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                     //double anguloMetacarpo = RadianToDegree(diferencaPontaMetacarpo.AngleTo(f2.GetLeapHand().StabilizedPalmPosition));
-                    double anguloIndicadorMedio = RadianToDegree((double)f2.GetLeapFinger().TipPosition.AngleTo(f3.GetLeapFinger().TipPosition));
-                    Debug.Log("Ângulo: " + anguloMetacInd); 
-                   
+                    //double anguloIndicadorMedio = RadianToDegree((double)f2.GetLeapFinger().TipPosition.AngleTo(f3.GetLeapFinger().TipPosition));
+                    //Debug.Log("Ângulo: " + anguloMetacInd); 
+                    Debug.Log(anguloMetacInd);
                     if (anguloMinAbdInd <= anguloMetacInd && anguloMetacInd <= 20 && contadorAbducao < qtdAbdInd &&
                         aux_texto_abd)
                     {
@@ -261,11 +273,11 @@ namespace Leap.Unity {
                         aux_texto_abd = false;
                         //Debug.Log("Ângulo indicador usando osso metacarpo médio: " + anguloMetacMed.ToString("n2"));
                        // Debug.Log("Ângulo indicador usando osso metacarpo indicador: " + anguloMetacInd.ToString("n2"));
-                        Debug.Log(RadianToDegree((double)angulo_dedos(diferencaPontaIndMetacarpo, f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction)));
+                        
                         infoAngulos += anguloMetacInd.ToString("n2") + "(indicador)-" + anguloMetacMed.ToString("n2") + "(médio);";
 
                     }
-                    if (anguloMetacInd < anguloMinAbdInd - 2 || anguloMetacInd > 20)
+                    if (anguloMetacInd < anguloMinAbdInd - 2)
                     {
                         //Debug.Log("Ângulo para fechar: " + anguloIndicadorMedio);
                         //Debug.Log("Ângulo usando osso metacarpo pra fechar: " + anguloMetacMed);
@@ -306,13 +318,13 @@ namespace Leap.Unity {
                     Vector diferencaProxMetacarpo = new Vector(proximalMedio.x - metacarpo.x, proximalMedio.y - metacarpo.y, proximalMedio.z - metacarpo.z);
                     double anguloMetacMed = RadianToDegree(f3.GetLeapHand().Direction.Normalized.AngleTo(diferencaPontaMedMetacarpo.Normalized)) - 8;//correção   
                     double anguloIndicadorMedio = RadianToDegree((double)f4.GetLeapFinger().TipPosition.Normalized.AngleTo(f3.GetLeapFinger().TipPosition.Normalized));
-                    // Debug.Log("Ângulo usando osso metacarpo médio: " + anguloMetacMed);
+                     
                     diferencaProxMetacarpo.x *= (-1);
                     double anguloMetaPalma = RadianToDegree((double)diferencaProxMetacarpo.AngleTo(f3.GetLeapHand().Direction.Normalized));
                     /*if (anguloIndicadorMedio > 3 && anguloIndicadorMedio <= 20 && contadorAbducao < qtdAbdMed &&
                         aux_texto_abd)
                     {*/
-                   // Debug.Log("Ângulo usando metacarpo com direção da palma: " + anguloMetaPalma.ToString("n2")+";"+anguloMetacMed.ToString("n2"));
+                    Debug.Log("Ângulo usando metacarpo com direção da palma: " + anguloMetaPalma.ToString("n2")+";"+anguloMetacMed.ToString("n2"));
                     if (anguloMinAbdMed <= anguloMetaPalma && anguloMetaPalma <= 20 && contadorAbducao < qtdAbdMed &&
                         aux_texto_abd)
                     { 
@@ -356,7 +368,7 @@ namespace Leap.Unity {
                             Vector metacarpo = f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).NextJoint;
                             Vector pontaDedoAnl = f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).NextJoint;
                             Vector diferencaPontaMet = new Vector(pontaDedoAnl.x-metacarpo.x,pontaDedoAnl.y-metacarpo.y,pontaDedoAnl.z-metacarpo.z);
-                            diferencaPontaMet.x *= (-1);
+                            if(f4.GetLeapHand().IsRight)diferencaPontaMet.x *= (-1);
                             double anguloMetacarpoAnl = RadianToDegree(diferencaPontaMet.Normalized.AngleTo(f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                             double anguloMetacarpo = RadianToDegree(diferencaPontaMet.Normalized.AngleTo(f3.GetLeapHand().Direction.Normalized));
                             //Debug.Log("Ângulo anelar com metacarpo: " + anguloMetacarpo);
@@ -461,7 +473,8 @@ namespace Leap.Unity {
                             //Debug.Log("Normal da palma: " + f2.GetLeapHand().PalmNormal);
                            // double anguloAlfa = RadianToDegree((double)f2.GetLeapFinger().TipPosition.AngleTo(f2.GetLeapHand().PalmPosition));
                             anguloAlfa = anguloAlfa - 90; //precisa diminuir pois o ângulo é mais amplo
-                            Debug.Log(anguloAlfa);
+                            double anguloProj = anguloProjecao(distanciaPontaJunta, f2.GetLeapHand().Direction);
+                            Debug.Log(anguloAlfa+";projecao: "+anguloProj);
                             if (anguloAlfa >= anguloMinExtensao && anguloAlfa <=30 && aux_texto_levant && contadorLevant < qtdLevantamento)
                             {
 
@@ -470,7 +483,7 @@ namespace Leap.Unity {
                                 exercicioConcluido.enabled = false;
                                 cuboProximoExercicio.SetActive(false);
                                 proximoExercicio.enabled = false;
-                                infoAngulos += anguloAlfa.ToString("n2") + ";";
+                                infoAngulos += anguloAlfa.ToString("n2")+"(normal da palma) - (projeção vetorial): "+ anguloProj.ToString("n2") + ";";
                                // Debug.Log(anguloAlfa);
                             }
                             if (anguloAlfa < anguloMinExtensao - 2)
@@ -488,47 +501,28 @@ namespace Leap.Unity {
                                     auxiliarAngulos[2] = infoAngulos;
                                     inputCsv[indiceLinha[4]] = auxiliarAngulos;
                                 }
+                                infoAngulos = "";
                             }
 
                         }
                 else if (exerciciosBolean[5])//extensão do dedo médio
-                {/*backup pois vou testar com outro dedo!
-                     Vector ponta = f3.GetLeapFinger().TipPosition;
-                    Vector juntaProximal = f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).PrevJoint;
-                    Vector distanciaPontaJunta = new Vector(ponta.x - juntaProximal.x, ponta.y - juntaProximal.y, ponta.z - juntaProximal.z);
-                    //calcular projeção para ver se fica melhor de pegar o ângulo
-                    Vector unitario = vetorUnitario(f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).NextJoint);
-                    float a1 = produto_escalar(distanciaPontaJunta,unitario);
-                    Vector projecaoDist = new Vector(unitario.x*a1,unitario.y*a1,unitario.z*a1);
-                    Vector a2 = new Vector(distanciaPontaJunta.x-projecaoDist.x,distanciaPontaJunta.y-projecaoDist.y,distanciaPontaJunta.z-projecaoDist.z);
-                    float modulosA2Dist = modulo_vetor(a2) / modulo_vetor(distanciaPontaJunta);
-                    float seno = Mathf.Sin(modulosA2Dist);
-                    double anguloProjecao = Mathf.Asin(seno);
-                    double anguloAlfa = RadianToDegree((double)distanciaPontaJunta.Normalized.AngleTo(f3.GetLeapHand().PalmNormal));
-                    anguloAlfa = (anguloAlfa - 90) * (-1); //precisa diminuir pois o ângulo é mais amplo*/
-
+                { 
                     //exerc�cio de levantar o dedo indicador
                     nome_exercicio.text = "Contador de extensão do dedo médio: " + contadorLevant.ToString();
                     //conta_text_Abducao.text = contadorLevant.ToString();
                     info_exercicio.enabled = true;
                     info_exercicio.texture = (Texture)Resources.Load("rv_instru_levant");
                     // 
-                    Vector ponta = f5.GetLeapFinger().TipPosition;
-                    Vector juntaProximal = f5.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).PrevJoint;
+                    Vector ponta = f3.GetLeapFinger().TipPosition;
+                    Vector juntaProximal = f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).PrevJoint;
                     Vector distanciaPontaJunta = new Vector(ponta.x - juntaProximal.x, ponta.y - juntaProximal.y, ponta.z - juntaProximal.z);
                     //calcular projeção para ver se fica melhor de pegar o ângulo
                     
-                    Vector unitario = vetorUnitario(f5.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).NextJoint);
-                    float a1 = produto_escalar(distanciaPontaJunta, unitario);
-                    Vector projecaoDist = new Vector(unitario.x * a1, unitario.y * a1, unitario.z * a1);
-                    Vector a2 = new Vector(distanciaPontaJunta.x - projecaoDist.x, distanciaPontaJunta.y - projecaoDist.y, distanciaPontaJunta.z - projecaoDist.z);
-                    float modulosA2Dist = modulo_vetor(a2) / modulo_vetor(projecaoDist);
-                    float tangente = Mathf.Tan(modulosA2Dist);
-                    double anguloProjecao = Mathf.Atan(tangente);
-                    double anguloAlfa = RadianToDegree((double)distanciaPontaJunta.Normalized.AngleTo(f4.GetLeapHand().PalmNormal));
+                    double anguloAlfa = RadianToDegree((double)distanciaPontaJunta.Normalized.AngleTo(f3.GetLeapHand().PalmNormal));
                     anguloAlfa = (anguloAlfa - 90);
+                    double anguloProj = anguloProjecao(distanciaPontaJunta, f3.GetLeapHand().Direction);
                     //double anguloBeta = RadianToDegree((double)distanciaPontaJunta.Normalized.AngleTo(f3.GetLeapHand().Direction));
-                    Debug.Log(anguloAlfa+"; projeção: "+anguloProjecao);
+                    Debug.Log(anguloAlfa+"; projeção: "+anguloProj);
                     if (anguloAlfa >= anguloMinExtensaoMedio && anguloAlfa <= 30 && aux_texto_levant && contadorLevant < qtdExtensaoMedio)
                     {
 
@@ -555,6 +549,7 @@ namespace Leap.Unity {
                             auxiliarAngulos[2] = infoAngulos;
                             inputCsv[indiceLinha[5]] = auxiliarAngulos;
                         }
+                        infoAngulos = "";
                     }
 
                 }
@@ -627,7 +622,7 @@ namespace Leap.Unity {
                                     inputCsv[indiceLinha[7]] = auxiliarAngulos;
                                 }
                                 infoAngulos = "";
-                    }
+                            }
 
                         }
                         else if (exerciciosBolean[8])//pinchAnl
@@ -658,7 +653,7 @@ namespace Leap.Unity {
                                     inputCsv[indiceLinha[8]] = auxiliarAngulos;
                                 }
                                 infoAngulos = "";
-                    }
+                            }
 
                         }
                         else if (exerciciosBolean[9])//pinchMindi

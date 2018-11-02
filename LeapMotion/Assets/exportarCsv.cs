@@ -156,16 +156,20 @@ public class exportarCsv : MonoBehaviour {
     {
         //depois passar no nome do arquivo sexo, idade e mão utilizada para exercícios
         //string dataHora = string.Format("{HH-mm-ss}",DateTime.Now);
+        string generoSelecionado = comecarExercicio.generoPaciente!=null? comecarExercicio.generoPaciente:"";
+        string idadeSelecionado = comecarExercicio.inputIdade != null ? comecarExercicio.inputIdade : "";
+        string generoIdade = idadeSelecionado + generoSelecionado;
+        
         string dataHora = DateTime.Now.ToString("HH-mm-ss-ddMMyyyy");
 
-        #if UNITY_EDITOR
-                        return Application.dataPath +"/CSV/"+dataHora+".csv";
-        #elif UNITY_ANDROID
-                        return Application.persistentDataPath+dataHora+".csv";
-        #elif UNITY_IPHONE
-                        return Application.persistentDataPath+"/"+dataHora+".csv";
-        #else
-        return Application.dataPath + "/" + dataHora+".csv";
+#if UNITY_EDITOR
+                        return Application.dataPath +"/CSV/"+string.Concat(generoIdade,dataHora)+".csv";
+#elif UNITY_ANDROID
+                        return Application.persistentDataPath+string.Concat(generoIdade,dataHora)+".csv";
+#elif UNITY_IPHONE
+                        return Application.persistentDataPath+"/"+string.Concat(generoIdade,dataHora)+".csv";
+#else
+        return Application.dataPath + "/" + string.Concat(generoIdade,dataHora)+".csv";
         #endif
     }
 }
