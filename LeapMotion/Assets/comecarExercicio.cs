@@ -12,11 +12,12 @@ public class comecarExercicio : MonoBehaviour {
     public static string passPinchInd, passPinchMed, passPinchAnl, passPinchMindi;
     public static string generoPaciente, inputIdade;
     public InputField i1, i2, i3, i4, i5, i6, i7, i8, i9;
-    public InputField parametroExtMed, idadePaciente;//parametroExtAnl,parametroExtMindi
+    public InputField parametroExtMed, idadePaciente, parametroExtAnl, parametroExtMindi;//parametroExtAnl,parametroExtMindi
     public Dropdown dropGeneroPaciente;
     //textos dos ângulos
-    public static string anguloAbdInd, anguloAbdMed, anguloAbdAnl, anguloAbdMind, anguloLevantamento, anguloExtMed;
-    public InputField anguloAbdIndIF, anguloAbdMedIF, anguloAbdAnlIF, anguloAbdMinIF, anguloLevantIF, anguloExtensaoMedIF;
+    public static string anguloAbdInd, anguloAbdMed, anguloAbdAnl, anguloAbdMind, anguloLevantamento, anguloExtMed, anguloExtAnl, anguloExtMindi;
+    public InputField anguloAbdIndIF, anguloAbdMedIF, anguloAbdAnlIF, anguloAbdMinIF, anguloLevantIF, anguloExtensaoMedIF,
+        anguloExtensaoAnlIF, anguloExtensaoMindiIF;
     //anguloExtensaoAnlIF, anguloExtensaoMindiIF
     
     // Use this for initialization
@@ -31,13 +32,15 @@ public class comecarExercicio : MonoBehaviour {
         i8.text = "0";
         i9.text = "0";
         parametroExtMed.text = "0";
+        parametroExtAnl.text = "0";
+        parametroExtMindi.text = "0";
         anguloAbdMinIF.text = "0";
         anguloAbdIndIF.text = "0";
         anguloAbdMedIF.text = "0";
         anguloAbdAnlIF.text = "0";
         anguloLevantIF.text = "0";
-        /*anguloExtensaoAnlIF.text = "0";
-        anguloExtensaoMindiIF.text = "0";*/
+        anguloExtensaoAnlIF.text = "0";
+        anguloExtensaoMindiIF.text = "0";
         anguloExtensaoMedIF.text = "0";
         idadePaciente.text = "0";
         Button btn = comecar.GetComponent<Button>();        
@@ -78,6 +81,8 @@ public class comecarExercicio : MonoBehaviour {
         passPinchAnl = i8.text;
         passPinchMindi = i9.text;
         passarExtMed = parametroExtMed.text;
+        passarExtAnl = parametroExtAnl.text;
+        passarExtMindi = parametroExtMindi.text;
         //textos dos ângulos desejados
         anguloAbdAnl = anguloAbdAnlIF.text;
         anguloAbdInd = anguloAbdIndIF.text;
@@ -85,6 +90,8 @@ public class comecarExercicio : MonoBehaviour {
         anguloAbdMind = anguloAbdMinIF.text;
         anguloLevantamento = anguloLevantIF.text;
         anguloExtMed = anguloExtensaoMedIF.text;
+        anguloExtAnl = anguloExtensaoAnlIF.text;
+        anguloExtMindi = anguloExtensaoMindiIF.text;
         exportarCsv.inicializarLinhasArquivo();
         SceneManager.LoadScene("cena_exercicios");
     }

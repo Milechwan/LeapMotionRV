@@ -37,6 +37,8 @@ public class exportarCsv : MonoBehaviour {
         int qtdPinchAnl = int.Parse(comecarExercicio.passPinchAnl == null ? "0" : comecarExercicio.passPinchAnl);
         int qtdPinchMindi = int.Parse(comecarExercicio.passPinchMindi == null ? "0" : comecarExercicio.passPinchMindi);
         int qtdExtensaoMed = int.Parse(comecarExercicio.passarExtMed == null ? "0" : comecarExercicio.passarExtMed);
+        int qtdExtensaoAnl = int.Parse(comecarExercicio.passarExtAnl == null ? "0" : comecarExercicio.passarExtAnl);
+        int qtdExtensaoMindi = int.Parse(comecarExercicio.passarExtMindi == null ? "0" : comecarExercicio.passarExtMindi);
         if (qtdAbducaoInd > 0)
         {
             string[] linhaAbdInd = new string[3];
@@ -91,6 +93,25 @@ public class exportarCsv : MonoBehaviour {
             dadosLinha.Add(linhaAbdInd);
             indiceLinha[5] = dadosLinha.Count - 1;
         }
+        if (qtdExtensaoAnl > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Extensão";
+            linhaAbdInd[1] = "Anelar";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[6] = dadosLinha.Count - 1;
+
+        }
+        if (qtdExtensaoMindi > 0)
+        {
+            string[] linhaAbdInd = new string[3];
+            linhaAbdInd[0] = "Extensão";
+            linhaAbdInd[1] = "Mindinho";
+
+            dadosLinha.Add(linhaAbdInd);
+            indiceLinha[7] = dadosLinha.Count - 1;
+        }
         if (qtdPinchInd > 0)
         {
             string[] linhaAbdInd = new string[3];
@@ -98,7 +119,7 @@ public class exportarCsv : MonoBehaviour {
             linhaAbdInd[1] = "Indicador";
 
             dadosLinha.Add(linhaAbdInd);
-            indiceLinha[6] = dadosLinha.Count - 1;
+            indiceLinha[8] = dadosLinha.Count - 1;
         }
         if (qtdPinchMed > 0)
         {
@@ -107,7 +128,7 @@ public class exportarCsv : MonoBehaviour {
             linhaAbdInd[1] = "Médio";
 
             dadosLinha.Add(linhaAbdInd);
-            indiceLinha[7] = dadosLinha.Count - 1;
+            indiceLinha[9] = dadosLinha.Count - 1;
         }
         if (qtdPinchAnl > 0)
         {
@@ -116,7 +137,7 @@ public class exportarCsv : MonoBehaviour {
             linhaAbdInd[1] = "Anelar";
 
             dadosLinha.Add(linhaAbdInd);
-            indiceLinha[8] = dadosLinha.Count - 1;
+            indiceLinha[10] = dadosLinha.Count - 1;
         }
         if (qtdPinchMindi > 0)
         {
@@ -125,7 +146,7 @@ public class exportarCsv : MonoBehaviour {
             linhaAbdInd[1] = "Mindinho";
 
             dadosLinha.Add(linhaAbdInd);
-            indiceLinha[9] = dadosLinha.Count - 1;
+            indiceLinha[11] = dadosLinha.Count - 1;
         }
     }
 
