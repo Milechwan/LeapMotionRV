@@ -250,8 +250,9 @@ namespace Leap.Unity {
 
                 if (exerciciosBolean[0]) //AbdInd
                 {
-                    //conta_text_Abducao.text = contadorAbducao.ToString();
+                    
                     info_exercicio.enabled = true;
+                    info_exercicio.texture = (Texture)Resources.Load("rv_instru_abd");
                     nome_exercicio.text = "Contador de adução/abdução do indicador: " + contadorAbducao.ToString();
                     Vector metacarpo = f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).NextJoint;
                     Vector pontaDedoInd = f2.GetLeapFinger().TipPosition;
@@ -310,10 +311,10 @@ namespace Leap.Unity {
                 }
                 else if (exerciciosBolean[1]) //AbdMedio
                 {
-                    // proximoExercicio.enabled = true;
+                    
                     nome_exercicio.text = "Contador de aducao/abducao medio: " + contadorAbducao.ToString(); ;
-                    //conta_text_Abducao.text = contadorAbducao.ToString();
                     info_exercicio.enabled = true;
+                    info_exercicio.texture = (Texture)Resources.Load("rv_instru_abd");
                     Vector metacarpo = f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).NextJoint;
 
                     Vector pontaDedoMed = f3.GetLeapFinger().TipPosition;
@@ -368,6 +369,7 @@ namespace Leap.Unity {
                     nome_exercicio.text = "Contador de aducao/abducao anelar: " + contadorAbducao.ToString();
                     //conta_text_Abducao.text = contadorAbducao.ToString();
                     info_exercicio.enabled = true;
+                    info_exercicio.texture = (Texture)Resources.Load("rv_instru_abd");
 
                     Vector metacarpo = f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).NextJoint;
                     Vector pontaDedoAnl = f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL).NextJoint;
@@ -414,8 +416,8 @@ namespace Leap.Unity {
                 else if (exerciciosBolean[3]) // abdMindi
                 {
                     nome_exercicio.text = "Contador de aducao/abducao mindinho: " + contadorAbducao.ToString();
-
                     info_exercicio.enabled = true;
+                    info_exercicio.texture = (Texture)Resources.Load("rv_instru_abd");
 
                     Bone proximalAnelar = f4.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL);
                     Bone proximalMindinho = f5.GetLeapFinger().Bone(Bone.BoneType.TYPE_PROXIMAL);
@@ -658,19 +660,17 @@ namespace Leap.Unity {
                     nome_exercicio.text = "Contador de Pinça (Indicador): " + conta_text_Pinch.text;
                     info_exercicio.enabled = true;
                     info_exercicio.texture = (Texture)Resources.Load("rv_instru_pinca");
-                    //conta_text_Abducao.text = contadorPinchInd.ToString();
+                    
                     exercicioConcluido.enabled = false;
 
-                    // double anguloProximal = RadianToDegree(anguloFlexaoProximalPinch(f2));
+                    
                     if ((contadorPinchInd < qtdPinchInd))//indicador - usa o PinchDetector do LeapMotion, que já é calibrado para ele 
                     {
                         contadorPinch = int.Parse(conta_text_Pinch.text);
-                        //Debug.Log("conta_text_Pinch " + conta_text_Pinch.text);
+                        
                         contadorPinchInd = int.Parse(conta_text_Pinch.text);
-                        // Debug.Log("contadorPinchInd " + contadorPinchInd.ToString());
+                        
                         auxiliarPinch = false;
-                        // Debug.Log("Ângulo flexão na pinça indicador: "+anguloProximal);
-                        //conta_text_Abducao.text = conta_text_Pinch.text;
                     }
 
                     if ((contadorPinchInd == qtdPinchInd))

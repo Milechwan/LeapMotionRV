@@ -7,7 +7,7 @@ using System;
 
 public class exportarCsv : MonoBehaviour {
     public static List<string[]> dadosLinha = new List<string[]>();//deixar público para que linhas com informações sejam adicionadas a partir do UpdateHand
-    public static int[] indiceLinha = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    public static int[] indiceLinha = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 , -1};
     // Use this for initialization
     void Start () {
         
