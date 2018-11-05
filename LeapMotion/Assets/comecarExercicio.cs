@@ -10,10 +10,10 @@ public class comecarExercicio : MonoBehaviour {
     public static string passAbdAduInd, passAbdAduMed, passAbdAduAnl, passAbdAduMindi;
     public static string passarLevantamento, passarExtMed, passarExtAnl, passarExtMindi;
     public static string passPinchInd, passPinchMed, passPinchAnl, passPinchMindi;
-    public static string generoPaciente, inputIdade;
+    public static string generoPaciente, inputIdade, maoPaciente;
     public InputField i1, i2, i3, i4, i5, i6, i7, i8, i9;
     public InputField parametroExtMed, idadePaciente, parametroExtAnl, parametroExtMindi;//parametroExtAnl,parametroExtMindi
-    public Dropdown dropGeneroPaciente;
+    public Dropdown dropGeneroPaciente, dropMao;
     //textos dos ângulos
     public static string anguloAbdInd, anguloAbdMed, anguloAbdAnl, anguloAbdMind, anguloLevantamento, anguloExtMed, anguloExtAnl, anguloExtMindi;
     public InputField anguloAbdIndIF, anguloAbdMedIF, anguloAbdAnlIF, anguloAbdMinIF, anguloLevantIF, anguloExtensaoMedIF,
@@ -66,6 +66,9 @@ public class comecarExercicio : MonoBehaviour {
     }
     void exercicio()
     {
+        //mão ecolhida
+        int dropDownMaoValue = dropMao.value;
+        maoPaciente = dropMao.options[dropDownMaoValue].text;
         //informações do paciente para salvar o csv
         inputIdade = idadePaciente.text;
         int dropDownValue = dropGeneroPaciente.value;

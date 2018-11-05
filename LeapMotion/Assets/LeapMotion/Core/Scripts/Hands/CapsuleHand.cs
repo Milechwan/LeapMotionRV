@@ -108,9 +108,13 @@ namespace Leap.Unity {
       base.BeginHand();
 
       if (_hand.IsLeft) {
+//        RenderizarMaoPaciente.maoEsquerda = true;
+        
         _sphereMat.color = _leftColorList[_leftColorIndex];
         _leftColorIndex = (_leftColorIndex + 1) % _leftColorList.Length;
       } else {
+        
+  //      RenderizarMaoPaciente.maoDireita = true;
         _sphereMat.color = _rightColorList[_rightColorIndex];
         _rightColorIndex = (_rightColorIndex + 1) % _rightColorList.Length;
       }
