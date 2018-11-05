@@ -59,8 +59,7 @@ namespace Leap.Unity {
     private Material _sphereMat;
     private Hand _hand;
     private Vector3[] _spherePositions;
-        //tentando passar a mão para script de RigidHand
-       // public static Hand mao;
+       
 
     public override ModelType HandModelType {
       get {
@@ -85,13 +84,8 @@ namespace Leap.Unity {
 
     public override void SetLeapHand(Hand hand) {
       _hand = hand;
-       //mao = _hand;
+       
     }
-
-   /* public static Hand getHandForRigidHand()
-        {
-            return mao;
-        }*/
 
     public override void InitHand() {
       if (_material != null) {

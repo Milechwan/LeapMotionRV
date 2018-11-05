@@ -21,9 +21,10 @@ public class renderizarMaoPaciente : MonoBehaviour {
         {
          //   Debug.Log(maoRenderizada);
             Hand objMao = maoRenderizada.GetLeapHand();
-            Debug.Log(objMao);
+            //Debug.Log(objMao);
             maoEsquerda = objMao.IsLeft;
             maoDireita = objMao.IsRight;
+            //Debug.Log("mao direita: "+maoDireita + "; mao esquerda: " + maoEsquerda);
         }
         
     }
@@ -31,13 +32,21 @@ public class renderizarMaoPaciente : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
-		if((maoEscolhida=="Esquerda" && maoDireita) || (maoEscolhida=="Direita" && maoEsquerda))
+		if ((string.Equals("Esquerda",maoEscolhida) && maoDireita) || (string.Equals(maoEscolhida,"Direita") && maoEsquerda)) //caso as duas mãos estejam ativas, uma delas precisa ser 
         {
+            Debug.Log("desativei!"+maoEscolhida);
             this.gameObject.SetActive(false);
+            //(maoEscolhida=="Esquerda" && maoDireita) || (maoEscolhida=="Direita" && maoEsquerda)
         }
         else
         {
             this.gameObject.SetActive(true);
         }
 	}
+    /*if(maoEsquerda && maoDireita)
+        {
+
+           
+        }
+        else*/
 }
