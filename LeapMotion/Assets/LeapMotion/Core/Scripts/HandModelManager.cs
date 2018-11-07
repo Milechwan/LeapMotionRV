@@ -258,13 +258,13 @@ namespace Leap.Unity {
     #endregion
 
     #region Hand Representations
-
+ 
     /**
-     * MakeHandRepresentation receives a Hand and combines that with a HandModelBase to create a HandRepresentation
-     * @param hand The Leap Hand data to be drive a HandModelBase
-     * @param modelType Filters for a type of hand model, for example, physics or graphics hands.
-     */
-    public HandRepresentation MakeHandRepresentation(Hand hand, ModelType modelType) {
+        * MakeHandRepresentation receives a Hand and combines that with a HandModelBase to create a HandRepresentation
+        * @param hand The Leap Hand data to be drive a HandModelBase
+        * @param modelType Filters for a type of hand model, for example, physics or graphics hands.
+        */
+        public HandRepresentation MakeHandRepresentation(Hand hand, ModelType modelType) {
       Chirality handChirality = hand.IsRight ? Chirality.Right : Chirality.Left;
       HandRepresentation handRep = new HandRepresentation(this, hand, handChirality, modelType);
       for (int i = 0; i < ModelPool.Count; i++) {
@@ -280,6 +280,7 @@ namespace Leap.Unity {
           }
         }
       }
+            
       activeHandReps.Add(handRep);
       return handRep;
     }
@@ -316,16 +317,16 @@ namespace Leap.Unity {
       }
     }
 
-    #endregion
+        #endregion
 
-    #region Group Methods
-
+        #region Group Methods
+        public static string maoEscolhida = comecarExercicio.maoPaciente;
     private void InitializeModelGroup(ModelGroup collectionGroup) {
         // Prevent the ModelGroup be initialized by multiple times
         if (modelGroupMapping.ContainsValue(collectionGroup)) {
           return;
         }
-
+            Debug.Log("handmodelmanager: "+maoEscolhida);
         collectionGroup._handModelManager = this;
         HandModelBase leftModel;
         HandModelBase rightModel;
@@ -337,7 +338,7 @@ namespace Leap.Unity {
         } else {
           leftModel = collectionGroup.LeftModel;
         }
-        if (leftModel != null) {
+        if (leftModel != null && string.Equals("Esquerda", maoEscolhida)) {
           collectionGroup.modelList.Add(leftModel);
           modelGroupMapping.Add(leftModel, collectionGroup);
         }
@@ -350,7 +351,7 @@ namespace Leap.Unity {
         } else {
           rightModel = collectionGroup.RightModel;
         }
-        if (rightModel != null) {
+        if (rightModel != null && string.Equals("Direita", maoEscolhida)) {
           collectionGroup.modelList.Add(rightModel);
           modelGroupMapping.Add(rightModel, collectionGroup);
         }
