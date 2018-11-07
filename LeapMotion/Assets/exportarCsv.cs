@@ -179,7 +179,8 @@ public class exportarCsv : MonoBehaviour {
         //string dataHora = string.Format("{HH-mm-ss}",DateTime.Now);
         string generoSelecionado = comecarExercicio.generoPaciente!=null? comecarExercicio.generoPaciente:"";
         string idadeSelecionado = comecarExercicio.inputIdade != null ? comecarExercicio.inputIdade : "";
-        string generoIdade = idadeSelecionado + generoSelecionado;
+        string maoSelecionada = comecarExercicio.maoPaciente != null ? comecarExercicio.maoPaciente : "";
+        string generoIdade = idadeSelecionado + generoSelecionado +maoSelecionada;
         
         string dataHora = DateTime.Now.ToString("HH-mm-ss-ddMMyyyy");
 

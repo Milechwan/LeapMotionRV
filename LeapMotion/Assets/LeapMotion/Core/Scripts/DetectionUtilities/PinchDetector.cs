@@ -46,6 +46,7 @@ namespace Leap.Unity {
 
     //public Text texto;
     public Text contadorPinch;
+    public Text mostraAngulo;
     public static string infoAngulos = "";
     public int temp = 0;
     protected virtual void OnValidate() {
@@ -87,9 +88,11 @@ namespace Leap.Unity {
 
       if (IsActive) {
         if (_distance > DeactivateDistance) {
-           // texto.enabled = false;
+                    // texto.enabled = false;
+            mostraAngulo.text = "Ângulo obtido: ";
             contadorPinch.enabled = false;
             changeState(false);
+            
           //return;
         }
       } else {
@@ -105,7 +108,8 @@ namespace Leap.Unity {
                     // Debug.Log("contPinch " + temp);
                     double ang = (double)(v2.Normalized.AngleTo(v1.Normalized) * 180.0 / Mathf.PI);
             infoAngulos += ang.ToString("n2") +";";//somente por causa do pinch do dedo indicador
-           // Debug.Log(infoAngulos);
+                                                   // Debug.Log(infoAngulos);
+            mostraAngulo.text = "Ângulo obtido: " + ang.ToString("n2");
             contadorPinch.text = temp.ToString();
             changeState(true);
         }
