@@ -89,7 +89,6 @@ namespace Leap.Unity {
       if (IsActive) {
         if (_distance > DeactivateDistance) {
                     // texto.enabled = false;
-            mostraAngulo.text = "Ângulo obtido: ";
             contadorPinch.enabled = false;
             changeState(false);
             
