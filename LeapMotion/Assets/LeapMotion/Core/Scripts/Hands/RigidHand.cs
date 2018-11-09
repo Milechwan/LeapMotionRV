@@ -35,51 +35,59 @@ namespace Leap.Unity {
         public Text conta_text_Pinch;
         public Text mostraAngulo;
         public GameObject cuboProximoExercicio;
-        public static int contadorAbducao = 0;
-        public static string maoEscolhida = comecarExercicio.maoPaciente==null?"":comecarExercicio.maoPaciente;
-        public static int anguloMinAbdInd = int.Parse(comecarExercicio.anguloAbdInd == null ? "4" : comecarExercicio.anguloAbdInd);//não começar em 0 para ter controle melhor
-        public static int anguloMinAbdMed = int.Parse(comecarExercicio.anguloAbdMed == null ? "4" : comecarExercicio.anguloAbdMed);
-        public static int anguloMinAbdAnl = int.Parse(comecarExercicio.anguloAbdAnl == null ? "4" : comecarExercicio.anguloAbdAnl);
-        public static int anguloMinAbdMind = int.Parse(comecarExercicio.anguloAbdMind == null ? "4" : comecarExercicio.anguloAbdMind);
-        public static int anguloMinExtensao = int.Parse(comecarExercicio.anguloLevantamento == null ? "10":comecarExercicio.anguloLevantamento);
-        public static int anguloMinExtensaoMedio = int.Parse(comecarExercicio.anguloExtMed == null ? "10" : comecarExercicio.anguloExtMed);
-        public static int anguloMinExtensaoAnl = int.Parse(comecarExercicio.anguloExtAnl == null ? "10" : comecarExercicio.anguloExtAnl);
-        public static int anguloMinExtensaoMindi = int.Parse(comecarExercicio.anguloExtMindi == null ? "10" : comecarExercicio.anguloExtMindi);
-        public static int qtdAbdInd = int.Parse(comecarExercicio.passAbdAduInd==null? "0" : comecarExercicio.passAbdAduInd);
-        public static int qtdAbdMed = int.Parse(comecarExercicio.passAbdAduMed==null ? "0" : comecarExercicio.passAbdAduMed);
-        public static int qtdAbdAnl = int.Parse(comecarExercicio.passAbdAduAnl==null? "0" : comecarExercicio.passAbdAduAnl);
-        public static int qtdAbdMindi = int.Parse(comecarExercicio.passAbdAduMindi==null? "0" : comecarExercicio.passAbdAduMindi);
-        public static int contadorLevant = 0;//esse � pra levantar dedo
-        public static int qtdLevantamento = int.Parse(comecarExercicio.passarLevantamento==null? "0" : comecarExercicio.passarLevantamento);
-        public static int qtdExtensaoMedio = int.Parse(comecarExercicio.passarExtMed == null ? "0" : comecarExercicio.passarExtMed);
-        public static int qtdExtensaoAnl = int.Parse(comecarExercicio.passarExtAnl == null ? "0" : comecarExercicio.passarExtAnl);
-        public static int qtdExtensaoMindi = int.Parse(comecarExercicio.passarExtMindi == null ? "0" : comecarExercicio.passarExtMindi);
-        public static int contadorNumeroDeExercicios = 0;
-        public static int contadorPinch;
-        public static int qtdPinch = int.Parse(comecarExercicio.passPinchInd==null? "0" : comecarExercicio.passPinchInd);// vai tirar depois
-        public static int qtdPinchInd = int.Parse(comecarExercicio.passPinchInd==null? "0" : comecarExercicio.passPinchInd);
-        public static int qtdPinchMed = int.Parse(comecarExercicio.passPinchMed==null? "0" : comecarExercicio.passPinchMed);
-        public static int qtdPinchAnl = int.Parse(comecarExercicio.passPinchAnl==null? "0" : comecarExercicio.passPinchAnl);
-        public static int qtdPinchMindi = int.Parse(comecarExercicio.passPinchMindi==null? "0" : comecarExercicio.passPinchMindi);
-        //public static bool bol = false;
-        public static bool[] exerciciosBolean = { true, false, false, false, false, false, false, false, false, false, false, false };//aumentar tamanho do array para dar conta de todos os outros 3
-        public static bool[] PinchBolean = { true, false, false, false };
-        public static bool concluido = false;
-        public static bool aux_texto_abd = true;
-        public static bool aux_texto_levant = true;//esse � pra levantar dedo
-        public static bool auxiliarPinch = true;
-        public static bool escreveuArquivo = false;
-        public static int contadorPinchInd = 0;
-        public static int contadorPinchMed = 0;
-        public static int contadorPinchAnl = 0;
-        public static int contadorPinchMindi = 0;
+        private int contadorAbducao = 0;
+        private string maoEscolhida = comecarExercicio.maoPaciente==null?"":comecarExercicio.maoPaciente;
+        private int anguloMinAbdInd = int.Parse(comecarExercicio.anguloAbdInd == null ? "4" : comecarExercicio.anguloAbdInd);//não começar em 0 para ter controle melhor
+        private int anguloMinAbdMed = int.Parse(comecarExercicio.anguloAbdMed == null ? "4" : comecarExercicio.anguloAbdMed);
+        private int anguloMinAbdAnl = int.Parse(comecarExercicio.anguloAbdAnl == null ? "4" : comecarExercicio.anguloAbdAnl);
+        private int anguloMinAbdMind = int.Parse(comecarExercicio.anguloAbdMind == null ? "4" : comecarExercicio.anguloAbdMind);
+        private int anguloMinExtensao = int.Parse(comecarExercicio.anguloLevantamento == null ? "10":comecarExercicio.anguloLevantamento);
+        private int anguloMinExtensaoMedio = int.Parse(comecarExercicio.anguloExtMed == null ? "10" : comecarExercicio.anguloExtMed);
+        private int anguloMinExtensaoAnl = int.Parse(comecarExercicio.anguloExtAnl == null ? "10" : comecarExercicio.anguloExtAnl);
+        private int anguloMinExtensaoMindi = int.Parse(comecarExercicio.anguloExtMindi == null ? "10" : comecarExercicio.anguloExtMindi);
+        private int qtdAbdInd = int.Parse(comecarExercicio.passAbdAduInd==null? "0" : comecarExercicio.passAbdAduInd);
+        private int qtdAbdMed = int.Parse(comecarExercicio.passAbdAduMed==null ? "0" : comecarExercicio.passAbdAduMed);
+        private int qtdAbdAnl = int.Parse(comecarExercicio.passAbdAduAnl==null? "0" : comecarExercicio.passAbdAduAnl);
+        private int qtdAbdMindi = int.Parse(comecarExercicio.passAbdAduMindi==null? "0" : comecarExercicio.passAbdAduMindi);
+        private int contadorLevant = 0;//esse � pra levantar dedo
+        private int qtdLevantamento = int.Parse(comecarExercicio.passarLevantamento==null? "0" : comecarExercicio.passarLevantamento);
+        private int qtdExtensaoMedio = int.Parse(comecarExercicio.passarExtMed == null ? "0" : comecarExercicio.passarExtMed);
+        private int qtdExtensaoAnl = int.Parse(comecarExercicio.passarExtAnl == null ? "0" : comecarExercicio.passarExtAnl);
+        private int qtdExtensaoMindi = int.Parse(comecarExercicio.passarExtMindi == null ? "0" : comecarExercicio.passarExtMindi);
+        private int contadorNumeroDeExercicios = 0;
+        private int contadorPinch;
+        private int qtdPinch = int.Parse(comecarExercicio.passPinchInd==null? "0" : comecarExercicio.passPinchInd);// vai tirar depois
+        private int qtdPinchInd = int.Parse(comecarExercicio.passPinchInd==null? "0" : comecarExercicio.passPinchInd);
+        private int qtdPinchMed = int.Parse(comecarExercicio.passPinchMed==null? "0" : comecarExercicio.passPinchMed);
+        private int qtdPinchAnl = int.Parse(comecarExercicio.passPinchAnl==null? "0" : comecarExercicio.passPinchAnl);
+        private int qtdPinchMindi = int.Parse(comecarExercicio.passPinchMindi==null? "0" : comecarExercicio.passPinchMindi);
+        private bool inicializeiExercicios = false;
+        private bool[] exerciciosBolean = { true, false, false, false, false, false, false, false, false, false, false, false };//aumentar tamanho do array para dar conta de todos os outros 3
+        private bool[] PinchBolean = { true, false, false, false };
+        private bool concluido = false;
+        private bool aux_texto_abd = true;
+        private bool aux_texto_levant = true;//esse � pra levantar dedo
+        private bool auxiliarPinch = true;
+        private bool escreveuArquivo = false;
+        private int contadorPinchInd = 0;
+        private int contadorPinchMed = 0;
+        private int contadorPinchAnl = 0;
+        private int contadorPinchMindi = 0;
         //array para guardar o índice da linha na tabela
-        public static int[] indiceLinha = exportarCsv.indiceLinha;
-        public static string infoAngulos = "";
-        public static List<string[]> inputCsv = exportarCsv.dadosLinha;
+        private int[] indiceLinha = exportarCsv.indiceLinha;
+        private string infoAngulos = "";
+        private List<string[]> inputCsv = exportarCsv.dadosLinha;
 
         public override bool SupportsEditorPersistence() {
             return true;
+        }
+
+        public void resetarValores()
+        {
+            Debug.Log("chamei resetar");
+            exerciciosBolean = new bool[] { true, false, false, false, false, false, false, false, false, false, false, false };
+            PinchBolean = new bool[]{ true, false, false, false };
+            contadorNumeroDeExercicios = 0;
         }
 
     public override void InitHand() {
@@ -237,7 +245,9 @@ namespace Leap.Unity {
                     double anguloMetacInd = RadianToDegree(diferencaPontaIndMetacarpo.AngleTo(f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                     double anguloMetacMed = RadianToDegree(diferencaPontaIndMetacarpo.AngleTo(f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                     anguloMetacInd = anguloMetacInd - 8;
-                    //Debug.Log(anguloMetacInd+" metacarpo indicador "+anguloMetacMed);
+                    //
+
+                    Debug.Log(anguloMetacInd+" metacarpo indicador "+anguloMetacMed);
                     if (anguloMinAbdInd <= anguloMetacInd && anguloMetacInd <= 20 && contadorAbducao < qtdAbdInd &&
                         aux_texto_abd)
                     {

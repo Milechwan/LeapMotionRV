@@ -96,8 +96,8 @@ public class comecarExercicio : MonoBehaviour {
         anguloExtMed = anguloExtensaoMedIF.text;
         anguloExtAnl = anguloExtensaoAnlIF.text;
         anguloExtMindi = anguloExtensaoMindiIF.text;
-        
         //passar para script de escrever o csv quais exercícios serão feitos
+        exportarCsv.indiceLinha = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
         exportarCsv.inicializarLinhasArquivo();
         SceneManager.LoadScene("cena_exercicios");
     }
