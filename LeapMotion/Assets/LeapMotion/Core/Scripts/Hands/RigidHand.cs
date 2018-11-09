@@ -212,6 +212,7 @@ namespace Leap.Unity {
                          escreveuArquivo = true;
                      }
                     
+
                 }
 
             }
@@ -236,7 +237,7 @@ namespace Leap.Unity {
                     double anguloMetacInd = RadianToDegree(diferencaPontaIndMetacarpo.AngleTo(f2.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                     double anguloMetacMed = RadianToDegree(diferencaPontaIndMetacarpo.AngleTo(f3.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                     anguloMetacInd = anguloMetacInd - 8;
-                    Debug.Log(anguloMetacInd+" metacarpo indicador "+anguloMetacMed);
+                    //Debug.Log(anguloMetacInd+" metacarpo indicador "+anguloMetacMed);
                     if (anguloMinAbdInd <= anguloMetacInd && anguloMetacInd <= 20 && contadorAbducao < qtdAbdInd &&
                         aux_texto_abd)
                     {
@@ -512,7 +513,7 @@ namespace Leap.Unity {
                         mostraAngulo.text = "Ângulo obtido: " + anguloAlfa.ToString("n2");
                         //Debug.Log(anguloAlfa);
                     }
-                    if (anguloAlfa < anguloMinExtensaoMedio)
+                    if (anguloAlfa < anguloMinExtensaoMedio - 2)
                     {
                         aux_texto_levant = true;
                     }
@@ -560,7 +561,7 @@ namespace Leap.Unity {
                         mostraAngulo.text = "Ângulo obtido: " + anguloAlfa.ToString("n2");
                         //Debug.Log(anguloAlfa);
                     }
-                    if (anguloAlfa < anguloMinExtensaoAnl)
+                    if (anguloAlfa < anguloMinExtensaoAnl - 2)
                     {
                         aux_texto_levant = true;
                     }
@@ -608,7 +609,7 @@ namespace Leap.Unity {
                         mostraAngulo.text = "Ângulo obtido: " + anguloAlfa.ToString("n2");
                         //Debug.Log(anguloAlfa);
                     }
-                    if (anguloAlfa < anguloMinExtensaoMindi)
+                    if (anguloAlfa < anguloMinExtensaoMindi - 2)
                     {
                         aux_texto_levant = true;
                     }

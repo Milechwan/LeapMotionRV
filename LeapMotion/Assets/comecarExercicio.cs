@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class comecarExercicio : MonoBehaviour {
     public Button comecar;
+    
     public static string passAbdAduInd, passAbdAduMed, passAbdAduAnl, passAbdAduMindi;
     public static string passarLevantamento, passarExtMed, passarExtAnl, passarExtMindi;
     public static string passPinchInd, passPinchMed, passPinchAnl, passPinchMindi;
@@ -95,6 +96,8 @@ public class comecarExercicio : MonoBehaviour {
         anguloExtMed = anguloExtensaoMedIF.text;
         anguloExtAnl = anguloExtensaoAnlIF.text;
         anguloExtMindi = anguloExtensaoMindiIF.text;
+        
+        //passar para script de escrever o csv quais exercícios serão feitos
         exportarCsv.inicializarLinhasArquivo();
         SceneManager.LoadScene("cena_exercicios");
     }
