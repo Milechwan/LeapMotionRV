@@ -98,6 +98,7 @@ public class comecarExercicio : MonoBehaviour {
         anguloExtMindi = anguloExtensaoMindiIF.text;
         //passar para script de escrever o csv quais exercícios serão feitos
         exportarCsv.indiceLinha = new int[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+        exportarCsv.dadosLinha = new List<string[]>();
         exportarCsv.inicializarLinhasArquivo();
         SceneManager.LoadScene("cena_exercicios");
     }

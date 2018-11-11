@@ -82,12 +82,51 @@ namespace Leap.Unity {
             return true;
         }
 
-        public void resetarValores()
+        public void atribuirValores()
+        {
+            contadorPinchAnl = 0;
+            qtdPinch = int.Parse(comecarExercicio.passPinchInd == null ? "0" : comecarExercicio.passPinchInd);// vai tirar depois
+            qtdPinchInd = int.Parse(comecarExercicio.passPinchInd == null ? "0" : comecarExercicio.passPinchInd);
+            qtdPinchMed = int.Parse(comecarExercicio.passPinchMed == null ? "0" : comecarExercicio.passPinchMed);
+            qtdPinchAnl = int.Parse(comecarExercicio.passPinchAnl == null ? "0" : comecarExercicio.passPinchAnl);
+            qtdPinchMindi = int.Parse(comecarExercicio.passPinchMindi == null ? "0" : comecarExercicio.passPinchMindi);
+            contadorPinchInd = 0;
+            contadorPinchMindi = 0;
+            contadorPinchMed = 0;
+            concluido = false;
+            aux_texto_abd = true;
+            aux_texto_levant = true;//esse � pra levantar dedo
+            auxiliarPinch = true;
+            escreveuArquivo = false;
+            contadorAbducao = 0;
+            maoEscolhida = comecarExercicio.maoPaciente == null ? "" : comecarExercicio.maoPaciente;
+            anguloMinAbdInd = int.Parse(comecarExercicio.anguloAbdInd == null ? "4" : comecarExercicio.anguloAbdInd);//não começar em 0 para ter controle melhor
+            anguloMinAbdMed = int.Parse(comecarExercicio.anguloAbdMed == null ? "4" : comecarExercicio.anguloAbdMed);
+            anguloMinAbdAnl = int.Parse(comecarExercicio.anguloAbdAnl == null ? "4" : comecarExercicio.anguloAbdAnl);
+            anguloMinAbdMind = int.Parse(comecarExercicio.anguloAbdMind == null ? "4" : comecarExercicio.anguloAbdMind);
+            anguloMinExtensao = int.Parse(comecarExercicio.anguloLevantamento == null ? "10" : comecarExercicio.anguloLevantamento);
+            anguloMinExtensaoMedio = int.Parse(comecarExercicio.anguloExtMed == null ? "10" : comecarExercicio.anguloExtMed);
+            anguloMinExtensaoAnl = int.Parse(comecarExercicio.anguloExtAnl == null ? "10" : comecarExercicio.anguloExtAnl);
+            anguloMinExtensaoMindi = int.Parse(comecarExercicio.anguloExtMindi == null ? "10" : comecarExercicio.anguloExtMindi);
+            qtdAbdInd = int.Parse(comecarExercicio.passAbdAduInd == null ? "0" : comecarExercicio.passAbdAduInd);
+            qtdAbdMed = int.Parse(comecarExercicio.passAbdAduMed == null ? "0" : comecarExercicio.passAbdAduMed);
+            qtdAbdAnl = int.Parse(comecarExercicio.passAbdAduAnl == null ? "0" : comecarExercicio.passAbdAduAnl);
+            qtdAbdMindi = int.Parse(comecarExercicio.passAbdAduMindi == null ? "0" : comecarExercicio.passAbdAduMindi);
+            contadorLevant = 0;//esse � pra levantar dedo
+            qtdLevantamento = int.Parse(comecarExercicio.passarLevantamento == null ? "0" : comecarExercicio.passarLevantamento);
+            qtdExtensaoMedio = int.Parse(comecarExercicio.passarExtMed == null ? "0" : comecarExercicio.passarExtMed);
+            qtdExtensaoAnl = int.Parse(comecarExercicio.passarExtAnl == null ? "0" : comecarExercicio.passarExtAnl);
+            qtdExtensaoMindi = int.Parse(comecarExercicio.passarExtMindi == null ? "0" : comecarExercicio.passarExtMindi);
+            infoAngulos = "";
+        }
+
+    public void resetarValores()
         {
             Debug.Log("chamei resetar");
             exerciciosBolean = new bool[] { true, false, false, false, false, false, false, false, false, false, false, false };
             PinchBolean = new bool[]{ true, false, false, false };
             contadorNumeroDeExercicios = 0;
+            inicializeiExercicios = false;
         }
 
     public override void InitHand() {
@@ -161,7 +200,10 @@ namespace Leap.Unity {
         }
 
         public override void UpdateHand() {
-
+            if (!inicializeiExercicios) {
+                atribuirValores();
+                inicializeiExercicios = true;
+            }
             FingerModel f1=null, f2 = null, f3 = null, f4 = null, f5 = null;
             //float angulo= 0.0f;
             for (int f = 0; f < fingers.Length; ++f)
@@ -225,7 +267,7 @@ namespace Leap.Unity {
 
             }
 
-            if (f1!=null && f2 != null && f3!=null && f4!=null && f5!=null && ((string.Equals(maoEscolhida,"Esquerda")&&f2.GetLeapHand().IsLeft)||string.Equals(maoEscolhida,"Direita")&&f2.GetLeapHand().IsRight))//é preciso checar se todos os dedos estão visíveis para que não dê problema de compilação ou null inesperado
+            if (f1!=null && f2 != null && f3!=null && f4!=null && f5!=null)//é preciso checar se todos os dedos estão visíveis para que não dê problema de compilação ou null inesperado
             {
 
                 if (exerciciosBolean[0]) //AbdInd

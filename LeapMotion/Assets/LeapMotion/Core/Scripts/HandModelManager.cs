@@ -320,13 +320,14 @@ namespace Leap.Unity {
         #endregion
 
         #region Group Methods
-        public static string maoEscolhida = comecarExercicio.maoPaciente;
+         
     private void InitializeModelGroup(ModelGroup collectionGroup) {
         // Prevent the ModelGroup be initialized by multiple times
         if (modelGroupMapping.ContainsValue(collectionGroup)) {
           return;
         }
-            Debug.Log("handmodelmanager: "+maoEscolhida);
+        string maoEscolhida = comecarExercicio.maoPaciente;
+            //Debug.Log("handmodelmanager: "+maoEscolhida);
         collectionGroup._handModelManager = this;
         HandModelBase leftModel;
         HandModelBase rightModel;
@@ -338,6 +339,7 @@ namespace Leap.Unity {
         } else {
           leftModel = collectionGroup.LeftModel;
         }
+          
         if (leftModel != null && string.Equals("Esquerda", maoEscolhida)) {
           collectionGroup.modelList.Add(leftModel);
           modelGroupMapping.Add(leftModel, collectionGroup);
@@ -351,6 +353,7 @@ namespace Leap.Unity {
         } else {
           rightModel = collectionGroup.RightModel;
         }
+        
         if (rightModel != null && string.Equals("Direita", maoEscolhida)) {
           collectionGroup.modelList.Add(rightModel);
           modelGroupMapping.Add(rightModel, collectionGroup);
