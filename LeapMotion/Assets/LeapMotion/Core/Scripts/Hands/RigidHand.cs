@@ -118,6 +118,7 @@ namespace Leap.Unity {
             qtdExtensaoAnl = int.Parse(comecarExercicio.passarExtAnl == null ? "0" : comecarExercicio.passarExtAnl);
             qtdExtensaoMindi = int.Parse(comecarExercicio.passarExtMindi == null ? "0" : comecarExercicio.passarExtMindi);
             infoAngulos = "";
+
         }
 
     public void resetarValores()
@@ -452,10 +453,11 @@ namespace Leap.Unity {
                     double anguloMetacarpo = RadianToDegree(diferenca.Normalized.AngleTo(f5.GetLeapFinger().Bone(Bone.BoneType.TYPE_METACARPAL).Direction));
                     double anguloMetacarpo2 = RadianToDegree(diferenca.Normalized.AngleTo(f3.GetLeapHand().Direction.Normalized));
                     float pitch = f5.GetLeapHand().PalmNormal.Pitch;
+                    float distanciaPontaDedos = f5.GetLeapFinger().TipPosition.DistanceTo(f4.GetLeapFinger().TipPosition);
                     anguloMetacarpo = anguloMetacarpo - 8;
                     Debug.Log("Angulo metacarpo mindinho: " + anguloMetacarpo + "; metacarpo com direção da palma: " + anguloMetacarpo2);
                     if (anguloMinAbdMind <= anguloMetacarpo && anguloMetacarpo < 21 && contadorAbducao < qtdAbdMindi &&
-                        aux_texto_abd && pitch < -1.30f)
+                        aux_texto_abd && pitch < -1.30f && distanciaPontaDedos > .02f)
                     {
                         contadorAbducao++;
                         exercicioConcluido.enabled = false;
@@ -560,7 +562,7 @@ namespace Leap.Unity {
                         exercicioConcluido.enabled = false;
                         cuboProximoExercicio.SetActive(false);
                         proximoExercicio.enabled = false;
-                        infoAngulos += anguloAlfa.ToString("n2") + ";";
+                        infoAngulos += anguloAlfa.ToString("n2") + "(normal da palma) - "+ anguloProj.ToString("n2")+ "(projeção vetorial);";
                         mostraAngulo.text = "Ângulo obtido: " + anguloAlfa.ToString("n2");
                         //Debug.Log(anguloAlfa);
                     }
@@ -608,7 +610,7 @@ namespace Leap.Unity {
                         exercicioConcluido.enabled = false;
                         cuboProximoExercicio.SetActive(false);
                         proximoExercicio.enabled = false;
-                        infoAngulos += anguloAlfa.ToString("n2") + ";";
+                        infoAngulos += anguloAlfa.ToString("n2") + "(normal da palma) - " + anguloProj.ToString("n2") + "(projeção vetorial);";
                         mostraAngulo.text = "Ângulo obtido: " + anguloAlfa.ToString("n2");
                         //Debug.Log(anguloAlfa);
                     }
@@ -656,7 +658,7 @@ namespace Leap.Unity {
                         exercicioConcluido.enabled = false;
                         cuboProximoExercicio.SetActive(false);
                         proximoExercicio.enabled = false;
-                        infoAngulos += anguloAlfa.ToString("n2") + ";";
+                        infoAngulos += anguloAlfa.ToString("n2") + "(normal da palma) - " + anguloProj.ToString("n2") + "(projeção vetorial);";
                         mostraAngulo.text = "Ângulo obtido: " + anguloAlfa.ToString("n2");
                         //Debug.Log(anguloAlfa);
                     }
